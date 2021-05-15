@@ -9,5 +9,6 @@
         "d:\\Programs\\Java\\javafx-sdk-11.0.2\\lib\\javafx.swing.jar",
         "d:\\Programs\\Java\\javafx-sdk-11.0.2\\lib\\javafx.web.jar",
         "d:\\Programs\\Java\\javafx-sdk-11.0.2\\lib\\javafx-swt.jar"
-    ]
+    ],
+    "discord.enabled": true
 }

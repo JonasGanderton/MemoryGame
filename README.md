@@ -3,7 +3,7 @@ A memory game using JavaFX, by Jonas Ganderton.
 
 ## Todo
 <ul>
-    <li>Read in cards from a file</li>
+    <li>Read in cards from a file, first line in filecould be rows,columns</li>
     <li>Get pairing to work
         <ul>
             <li>Card
