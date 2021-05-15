@@ -55,8 +55,9 @@ public class MemoryApp extends Application {
         grid.setVgap(SPACING);
         grid.setHgap(SPACING);
 
+        // Populate grid
         for (int i = 0; i < 5; i++) { // Column
-            for (int j = 0; j < 2; j++) { // Row
+            for (int j = 0; j < 3; j++) { // Row
                 grid.add(new Card("Card " + i + " " + j), i, j);
             }
         }
@@ -74,11 +75,13 @@ public class MemoryApp extends Application {
         tiles.setAlignment(Pos.CENTER);
         tiles.setVgap(SPACING);
         tiles.setHgap(SPACING);
-        
+
+        // Populate tiles
         String name = "test";
         for (int i = 0; i < 20; i++) {
             name += i;
             Card c = new Card(name);
+            // Print name on click
             c.setOnAction(new EventHandler<ActionEvent>(){
                 public void handle(ActionEvent event) {
                     System.out.println(c.getText());
