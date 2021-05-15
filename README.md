@@ -6,8 +6,12 @@ A memory game using JavaFX, by Jonas Ganderton.
     <li>Read in cards from a file</li>
     <li>Get pairing to work
         <ul>
-            <li>Card `private Card pair;`</li>
-            <li>Array of pairs `Card[] pairs;`</li>
+            <li>Card
+                <code>private Card pair;</code>
+            </li>
+            <li>Array of pairs
+                <code>Card[][] pairs = new Card[cardNum/2][2];</code>
+            </li>
         </ul>
     </li>
     <li>Style the cards</li>
