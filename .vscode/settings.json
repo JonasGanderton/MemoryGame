@@ -1,3 +1,4 @@
+// Project settings
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
