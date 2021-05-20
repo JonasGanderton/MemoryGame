@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 import javafx.application.Application;
@@ -27,10 +28,12 @@ import javafx.stage.Stage;
 public class MemoryApp extends Application {
 
     private static final String BACKGROUND_STYLE = "-fx-background-color: DAE6F3;";
+    private static final String FILENAME = "cardPairs.txt";
     private static final int SPACING = 10;
 
     private Pane layout;
     private Scene scene;
+    private ArrayList<Card> clicked = new ArrayList<>();
     
     public static void main(String[] args) {
         launch(args);
@@ -59,8 +62,8 @@ public class MemoryApp extends Application {
     private void configureLayout() {
         layout = addGridPane(); // Removes error while I keep both options open.
         try {
-            layout = addTilePane(readCardStrings("cardPairs.txt"));
-        } catch (Exception e) {
+            layout = addTilePane(readCardStrings(FILENAME));
+        } catch (FileNotFoundException e) {
             System.out.println("File not found");
         }
         layout.setStyle(BACKGROUND_STYLE);
@@ -121,12 +124,15 @@ public class MemoryApp extends Application {
                 c.setOnAction(new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent event) {
                         System.out.print(c.getText()); // Print name on click.
+                        clicked.add(c);
+                        checkClicked();
                     }
                 });
             } else {
                 System.out.println(node.getClass());
             }
         }
+        randomise(nodes);
         return tiles;
     }
 
@@ -162,5 +168,39 @@ public class MemoryApp extends Application {
         }
         pairIn.close();
         return cardPairs;
+    }
+
+    /**
+     * Check to see if a pair has been found.
+     */
+    private void checkClicked() {
+        if (clicked.size() == 2) {
+            if (clicked.get(0).getPair() == clicked.get(1)) {
+                System.out.println(" Pair found!");
+            } else {
+                System.out.println(" Not a pair");
+            }
+            clicked.remove(0);
+            clicked.remove(0);
+        }
+    }
+
+    /**
+     * Randomise the order of nodes in an ObservableList.
+     * 
+     * @param nodes Nodes to randomise order of.
+     */
+    private void randomise(ObservableList<Node> nodes) {
+        Random randomGenerator = new Random();
+        Card nullCard = new Card(""); // Place holder while nodes are switched.
+        for (int i = 0; i < nodes.size(); i++) {
+            int randomPos = randomGenerator.nextInt(nodes.size());
+            // Need two temps, as can't have duplicates in ObservableList.
+            Node tempA = nodes.get(i);
+            Node tempB = nodes.get(randomPos);
+            nodes.set(i, nullCard);
+            nodes.set(randomPos, tempA);
+            nodes.set(i, tempB);
+        }
     }
 }
