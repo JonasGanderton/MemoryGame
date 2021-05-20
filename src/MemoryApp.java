@@ -1,3 +1,8 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,8 +33,11 @@ public class MemoryApp extends Application {
     public void start(Stage window) {
         // Configure the layout
         layout = addGridPane();
-        layout = addTilePane();
-        
+        try {
+            layout = addTilePane(readCardStrings("cardPairs.txt"));
+        } catch (Exception e) {
+            System.out.println("File not found");
+        }
 
         layout.setStyle("-fx-background-color: DAE6F3;");
         layout.setPadding(new Insets(SPACING)); // If all different: ^ > v <
@@ -70,25 +78,52 @@ public class MemoryApp extends Application {
      * 
      * @return TilePane.
      */
-    private TilePane addTilePane() {
+    private TilePane addTilePane(ArrayList<String[]> cardStrings) {
         TilePane tiles = new TilePane();
         tiles.setAlignment(Pos.CENTER);
         tiles.setVgap(SPACING);
         tiles.setHgap(SPACING);
 
-        // Populate tiles
-        String name = "test";
-        for (int i = 0; i < 20; i++) {
-            name += i;
-            Card c = new Card(name);
-            // Print name on click
-            c.setOnAction(new EventHandler<ActionEvent>(){
-                public void handle(ActionEvent event) {
-                    System.out.println(c.getText());
-                }
-            });
-            tiles.getChildren().add(c);
+        for (String[] strings : cardStrings) {
+            System.out.println(strings[0] + " " + strings[1]);
+        }
+
+        //Populate tiles with cards
+        for (String[] cardPair : cardStrings) {
+            for (String cardName : cardPair) {
+                Card c = new Card(cardName);
+                c.setOnAction(new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent event) {
+                        System.out.println(c.getText()); // Print name on click.
+                    }
+                });
+                tiles.getChildren().add(c);
+            }
         }
         return tiles;
+    }
+
+    private ArrayList<String[]> readCardStrings (String filename) throws FileNotFoundException {
+        ArrayList<String[]> cardPairs = new ArrayList<>();
+        File data = new File(filename);
+        Scanner pairIn = new Scanner(data);
+
+        while (pairIn.hasNext()) {
+            // Get card pair
+            Scanner singleIn = new Scanner(pairIn.nextLine());
+            singleIn.useDelimiter(",");    
+
+            // Set the pair
+            String[] pair = new String[2];
+            pair[0] = singleIn.next();
+            if (singleIn.hasNext()) {
+                pair[1] = singleIn.next(); // If card has a pair.
+            } else {
+                pair[1] = pair[0]; // If not, duplicate card.
+            }
+            cardPairs.add(pair);
+        }
+        pairIn.close();
+        return cardPairs;
     }
 }
