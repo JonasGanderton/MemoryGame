@@ -103,9 +103,9 @@ public class MemoryApp extends Application {
         tiles.setVgap(SPACING);
         tiles.setHgap(SPACING);
 
-        for (String[] strings : cardStrings) {
+        /*for (String[] strings : cardStrings) {
             System.out.println(strings[0] + " " + strings[1]);
-        }
+        }*/
 
         // Populate tiles with cards
         for (String[] cardPair : cardStrings) {
@@ -125,6 +125,7 @@ public class MemoryApp extends Application {
                     public void handle(ActionEvent event) {
                         System.out.print(c.getText()); // Print name on click.
                         clicked.add(c);
+                        c.setSelected(true);
                         checkClicked();
                     }
                 });
@@ -177,8 +178,11 @@ public class MemoryApp extends Application {
         if (clicked.size() == 2) {
             if (clicked.get(0).getPair() == clicked.get(1)) {
                 System.out.println(" Pair found!");
+                clicked.get(0).setDisable(true);
+                clicked.get(1).setDisable(true);
             } else {
                 System.out.println(" Not a pair");
+                clicked.get(0).setSelected(false);
             }
             clicked.remove(0);
             clicked.remove(0);
