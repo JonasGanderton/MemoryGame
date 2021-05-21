@@ -183,6 +183,8 @@ public class MemoryApp extends Application {
             } else {
                 System.out.println(" Not a pair");
                 clicked.get(0).setSelected(false);
+                clicked.get(1).setSelected(false);
+                clicked.get(1).setStyleHover();
             }
             clicked.remove(0);
             clicked.remove(0);

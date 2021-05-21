@@ -1,4 +1,6 @@
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 
 /**
  * Card.java
@@ -24,10 +26,18 @@ public class Card extends Button {
      */
     public Card(String text) {
         super(text);
+        selected = false;
         setStyle(IDLE_STYLE);
         setOnMouseEntered(e -> setStyle(HOVER_STYLE));
-        setOnMouseExited(e -> (!selected) ? setStyle(IDLE_STYLE) : setStyle(SELECTED_STYLE));
-        selected = false;
+        setOnMouseExited(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                if (selected) {
+                    setStyle(SELECTED_STYLE);
+                } else {
+                    setStyle(IDLE_STYLE);
+                }
+            }
+        });
     }
     
     /**
@@ -54,5 +64,12 @@ public class Card extends Button {
         } else {
             setStyle(IDLE_STYLE);
         }
+    }
+
+    /**
+     * Set the card to hover style.
+     */
+    public void setStyleHover() {
+        setStyle(HOVER_STYLE);
     }
 }
