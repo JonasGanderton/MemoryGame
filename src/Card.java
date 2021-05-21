@@ -28,13 +28,14 @@ public class Card extends Button {
         super(text);
         selected = false;
         setStyle(IDLE_STYLE);
+
         setOnMouseEntered(e -> setStyle(HOVER_STYLE));
         setOnMouseExited(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-                if (selected) {
-                    setStyle(SELECTED_STYLE);
+                if (!selected) {
+                    setStyle(IDLE_STYLE); // Currently scrolling over.
                 } else {
-                    setStyle(IDLE_STYLE);
+                    setStyle(SELECTED_STYLE); // Has been clicked on too.
                 }
             }
         });
