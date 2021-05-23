@@ -33,6 +33,8 @@ public class MemoryApp extends Application {
 
     private Pane layout;
     private Scene scene;
+    private VisibleCard hideAll;
+    private Boolean canSelect;
     private ArrayList<Card> clicked = new ArrayList<>();
     
     public static void main(String[] args) {
@@ -48,6 +50,7 @@ public class MemoryApp extends Application {
     public void start(Stage window) {
         // Configure the scene and window
         configureLayout();
+        canSelect = true;
         scene = new Scene(layout, 500, 450);
         window.setResizable(false);
         window.setScene(scene);
@@ -61,13 +64,32 @@ public class MemoryApp extends Application {
      */
     private void configureLayout() {
         layout = addGridPane(); // Removes error while I keep both options open.
+        layout.setStyle(BACKGROUND_STYLE);
+        layout.setPadding(new Insets(SPACING)); // If all different: ^ > v <
+
+        // Add cards
         try {
             layout = addTilePane(readCardStrings(FILENAME));
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
         }
-        layout.setStyle(BACKGROUND_STYLE);
-        layout.setPadding(new Insets(SPACING)); // If all different: ^ > v <
+        
+        // Add hide all card
+        hideAll = new VisibleCard("Flip selected cards");
+        hideAll.setDisable(true);
+        hideAll.minWidth(400);
+        hideAll.setOnAction(e -> {
+            System.out.println("-Hiding selected cards-");
+            for (int i = 0; i < clicked.size(); i++) {
+                clicked.get(0).setSelected(false);
+                clicked.remove(0);
+            }
+            hideAll.setDisable(true);
+            canSelect = true;
+        });
+        layout.getChildren().add(hideAll);
+
+        
     }
 
     /**
@@ -123,10 +145,14 @@ public class MemoryApp extends Application {
                 Card c = (Card) node;
                 c.setOnAction(new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent event) {
-                        System.out.print(c.getText()); // Print name on click.
-                        clicked.add(c);
-                        c.setSelected(true);
-                        checkClicked();
+                        if (canSelect) {
+                            System.out.print(c.getText()); // Print name on click.
+                            clicked.add(c);
+                            c.setSelected(true);
+                            checkClicked();
+                        } else {
+                            System.out.println("Must deselect cards first");
+                        }
                     }
                 });
             } else {
@@ -180,15 +206,15 @@ public class MemoryApp extends Application {
                 System.out.println(" Pair found!");
                 clicked.get(0).setDisable(true);
                 clicked.get(1).setDisable(true);
+                clicked.remove(0);
+                clicked.remove(0);
+                canSelect = true;
             } else {
                 System.out.println(" Not a pair");
-                clicked.get(0).setSelected(false);
-                Card temp = clicked.get(1);
-                temp.setSelected(false);
-                temp.setStyleHover();
+                clicked.get(1).setSelected(true);
+                hideAll.setDisable(false);
+                canSelect = false;
             }
-            clicked.remove(0);
-            clicked.remove(0);
         }
     }
 
@@ -202,6 +228,7 @@ public class MemoryApp extends Application {
         Card nullCard = new Card(""); // Place holder while nodes are switched.
         for (int i = 0; i < nodes.size(); i++) {
             int randomPos = randomGenerator.nextInt(nodes.size());
+
             // Need two temps, as can't have duplicates in ObservableList.
             Node tempA = nodes.get(i);
             Node tempB = nodes.get(randomPos);

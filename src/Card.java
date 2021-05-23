@@ -12,12 +12,14 @@ import javafx.scene.input.MouseEvent;
  */
 public class Card extends Button {
 
-    private static final String IDLE_STYLE = "-fx-background-color: #00B299;-fx-text-fill: transparent;";
+    protected static final String FONT_STYLE = "-fx-text-fill: #004040;";
+    private static final String HIDDEN_STYLE = "-fx-background-color: #00B299;-fx-text-fill: transparent;";
     private static final String HOVER_STYLE = "-fx-background-color: #009279;-fx-text-fill: transparent;";
-    private static final String SELECTED_STYLE = "-fx-background-color: #00D2A9;-fx-text-fill: #004040;";
-    
+    private static final String SELECTED_STYLE = "-fx-background-color: #00D2A9;" + FONT_STYLE;
+
     private Card pair;
-    private boolean selected;
+    protected boolean selected;
+    
 
     /**
      * Create a card.
@@ -27,8 +29,16 @@ public class Card extends Button {
     public Card(String text) {
         super(text);
         selected = false;
-        setStyle(IDLE_STYLE);
+        setStyle(HIDDEN_STYLE);
+
+        this.setActions();
         
+    }
+
+    /**
+     * Set actions for card.
+     */
+    private void setActions() {
         setOnMouseEntered(e -> {
             if (!selected) {
                 setStyle(HOVER_STYLE);
@@ -37,7 +47,7 @@ public class Card extends Button {
         setOnMouseExited(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent e) {
                 if (!selected) {
-                    setStyle(IDLE_STYLE); // Currently scrolling over.
+                    setStyle(HIDDEN_STYLE); // Currently scrolling over.
                 } else {
                     setStyle(SELECTED_STYLE); // Has been clicked on too.
                 }
@@ -67,7 +77,7 @@ public class Card extends Button {
         if (selected) {
             setStyle(SELECTED_STYLE);
         } else {
-            setStyle(IDLE_STYLE);
+            setStyle(HIDDEN_STYLE);
         }
     }
 
