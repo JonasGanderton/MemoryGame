@@ -12,9 +12,9 @@ import javafx.scene.input.MouseEvent;
  */
 public class Card extends Button {
 
-    private static final String IDLE_STYLE = "-fx-background-color: #00B299;";
-    private static final String HOVER_STYLE = "-fx-background-color: #009279;";
-    private static final String SELECTED_STYLE = "-fx-background-color: #00D2B9;";
+    private static final String IDLE_STYLE = "-fx-background-color: #00B299;-fx-text-fill: transparent;";
+    private static final String HOVER_STYLE = "-fx-background-color: #009279;-fx-text-fill: transparent;";
+    private static final String SELECTED_STYLE = "-fx-background-color: #00D2A9;-fx-text-fill: #004040;";
     
     private Card pair;
     private boolean selected;
@@ -28,10 +28,14 @@ public class Card extends Button {
         super(text);
         selected = false;
         setStyle(IDLE_STYLE);
-
-        setOnMouseEntered(e -> setStyle(HOVER_STYLE));
+        
+        setOnMouseEntered(e -> {
+            if (!selected) {
+                setStyle(HOVER_STYLE);
+            }
+        });
         setOnMouseExited(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {
+            public void handle(MouseEvent e) {
                 if (!selected) {
                     setStyle(IDLE_STYLE); // Currently scrolling over.
                 } else {
