@@ -1,6 +1,4 @@
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 
 /**
  * Card.java
@@ -44,13 +42,11 @@ public class Card extends Button {
                 setStyle(HOVER_STYLE);
             }
         });
-        setOnMouseExited(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent e) {
-                if (!selected) {
-                    setStyle(HIDDEN_STYLE); // Currently scrolling over.
-                } else {
-                    setStyle(SELECTED_STYLE); // Has been clicked on too.
-                }
+        setOnMouseExited(e -> {
+            if (!selected) {
+                setStyle(HIDDEN_STYLE); // Currently scrolling over.
+            } else {
+                setStyle(SELECTED_STYLE); // Has been clicked on too.
             }
         });
     }

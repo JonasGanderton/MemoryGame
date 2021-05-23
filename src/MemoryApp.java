@@ -6,8 +6,6 @@ import java.util.Scanner;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -47,7 +45,7 @@ public class MemoryApp extends Application {
      * @param window
      */
     @Override
-    public void start(Stage window) {
+    public void start(Stage window) throws FileNotFoundException {
         // Configure the scene and window
         configureLayout();
         canSelect = true;
@@ -62,25 +60,23 @@ public class MemoryApp extends Application {
     /**
      * Configures the layout for the cards.
      */
-    private void configureLayout() {
-        layout = addGridPane(); // Removes error while I keep both options open.
+    private void configureLayout() throws FileNotFoundException {
+        // Add cards
+        layout = addGridPane(readCardStrings(FILENAME));
+        layout = addTilePane(readCardStrings(FILENAME));
+        setCardsActions();
+        randomise(layout.getChildren());
+
+        // Some layout settings
         layout.setStyle(BACKGROUND_STYLE);
         layout.setPadding(new Insets(SPACING)); // If all different: ^ > v <
 
-        // Add cards
-        try {
-            layout = addTilePane(readCardStrings(FILENAME));
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found");
-        }
-        
         // Add hide all card
         hideAll = new VisibleCard("Flip selected cards");
         hideAll.setDisable(true);
-        hideAll.minWidth(400);
         hideAll.setOnAction(e -> {
             System.out.println("-Hiding selected cards-");
-            for (int i = 0; i < clicked.size(); i++) {
+            for (int i = 0; i < 2; i++) {
                 clicked.get(0).setSelected(false);
                 clicked.remove(0);
             }
@@ -88,8 +84,6 @@ public class MemoryApp extends Application {
             canSelect = true;
         });
         layout.getChildren().add(hideAll);
-
-        
     }
 
     /**
@@ -98,17 +92,19 @@ public class MemoryApp extends Application {
      * 
      * @return GridPane.
      */
-    private GridPane addGridPane() {
+    private GridPane addGridPane(ArrayList<String[]> cardStrings) {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setVgap(SPACING);
         grid.setHgap(SPACING);
 
-        // Populate grid
-        for (int i = 0; i < 5; i++) { // Column
-            for (int j = 0; j < 3; j++) { // Row
-                grid.add(new Card("Card " + i + " " + j), i, j);
-            }
+        // Populate grid with cards
+        for (String[] cardPair : cardStrings) {
+            Card c1 = new Card(cardPair[0]);
+            Card c2 = new Card(cardPair[1]);
+            c1.setPair(c2);
+            c2.setPair(c1);
+            grid.getChildren().addAll(c1, c2);
         }
         return grid;
     }
@@ -125,10 +121,6 @@ public class MemoryApp extends Application {
         tiles.setVgap(SPACING);
         tiles.setHgap(SPACING);
 
-        /*for (String[] strings : cardStrings) {
-            System.out.println(strings[0] + " " + strings[1]);
-        }*/
-
         // Populate tiles with cards
         for (String[] cardPair : cardStrings) {
             Card c1 = new Card(cardPair[0]);
@@ -137,29 +129,6 @@ public class MemoryApp extends Application {
             c2.setPair(c1);
             tiles.getChildren().addAll(c1,c2);
         }
-
-        // Make all cards print their name.
-        ObservableList<Node> nodes = tiles.getChildren();
-        for (Node node : nodes) {
-            if (node instanceof Card) {
-                Card c = (Card) node;
-                c.setOnAction(new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent event) {
-                        if (canSelect) {
-                            System.out.print(c.getText()); // Print name on click.
-                            clicked.add(c);
-                            c.setSelected(true);
-                            checkClicked();
-                        } else {
-                            System.out.println("Must deselect cards first");
-                        }
-                    }
-                });
-            } else {
-                System.out.println(node.getClass());
-            }
-        }
-        randomise(nodes);
         return tiles;
     }
 
@@ -194,6 +163,11 @@ public class MemoryApp extends Application {
             cardPairs.add(pair);
         }
         pairIn.close();
+
+        //for (String[] strings : cardPairs) {
+        //    System.out.println(strings[0] + " " + strings[1]);
+        //}
+        
         return cardPairs;
     }
 
@@ -235,6 +209,34 @@ public class MemoryApp extends Application {
             nodes.set(i, nullCard);
             nodes.set(randomPos, tempA);
             nodes.set(i, tempB);
+        }
+    }
+
+    /**
+     * When clicked, a card will try to:
+     * - Print its name
+     * - Get added to clicked list
+     * - Go into selected mode
+     */
+    private void setCardsActions() {
+        ObservableList<Node> nodes = layout.getChildren();
+        for(Node node : nodes) {
+            if (node instanceof Card) {
+                Card c = (Card) node;
+
+                c.setOnAction(e -> {
+                    if (canSelect) {
+                        System.out.print(c.getText());
+                        clicked.add(c);
+                        c.setSelected(true);
+                        checkClicked();
+                    } else {
+                        System.out.println("Must deselect cards first");
+                    }
+                });
+            } else {
+                System.out.println(node.getClass());
+            }
         }
     }
 }
