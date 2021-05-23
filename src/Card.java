@@ -10,7 +10,7 @@ import javafx.scene.control.Button;
  */
 public class Card extends Button {
 
-    protected static final String FONT_STYLE = "-fx-text-fill: #004040;";
+    protected static final String FONT_STYLE = "-fx-text-fill: #004040;-fx-font-size: 16px;";
     private static final String HIDDEN_STYLE = "-fx-background-color: #00B299;-fx-text-fill: transparent;";
     private static final String HOVER_STYLE = "-fx-background-color: #009279;-fx-text-fill: transparent;";
     private static final String SELECTED_STYLE = "-fx-background-color: #00D2A9;" + FONT_STYLE;

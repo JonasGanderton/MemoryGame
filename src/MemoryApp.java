@@ -10,8 +10,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 
@@ -30,6 +33,8 @@ public class MemoryApp extends Application {
     private static final int SPACING = 10;
 
     private Pane layout;
+    private GridPane gridLayout;
+    private TilePane tileLayout;
     private Scene scene;
     private VisibleCard hideAll;
     private Boolean canSelect;
@@ -49,7 +54,7 @@ public class MemoryApp extends Application {
         // Configure the scene and window
         configureLayout();
         canSelect = true;
-        scene = new Scene(layout, 500, 450);
+        scene = new Scene(layout, 650, 600);
         window.setResizable(false);
         window.setScene(scene);
         window.setTitle("Memory game");
@@ -62,28 +67,19 @@ public class MemoryApp extends Application {
      */
     private void configureLayout() throws FileNotFoundException {
         // Add cards
-        layout = addGridPane(readCardStrings(FILENAME));
-        layout = addTilePane(readCardStrings(FILENAME));
-        setCardsActions();
-        randomise(layout.getChildren());
+        gridLayout = addGridPane(readCardStrings(FILENAME));
+        tileLayout = addTilePane(readCardStrings(FILENAME));
+        layout = gridLayout;
+        configureCards();
 
         // Some layout settings
         layout.setStyle(BACKGROUND_STYLE);
         layout.setPadding(new Insets(SPACING)); // If all different: ^ > v <
 
         // Add hide all card
-        hideAll = new VisibleCard("Flip selected cards");
-        hideAll.setDisable(true);
-        hideAll.setOnAction(e -> {
-            System.out.println("-Hiding selected cards-");
-            for (int i = 0; i < 2; i++) {
-                clicked.get(0).setSelected(false);
-                clicked.remove(0);
-            }
-            hideAll.setDisable(true);
-            canSelect = true;
-        });
-        layout.getChildren().add(hideAll);
+        configureHideAllCard();
+        tileLayout.getChildren().add(hideAll);
+        gridLayout.add(hideAll, 1, gridLayout.getRowCount() - 1, 2, 1);
     }
 
     /**
@@ -99,13 +95,36 @@ public class MemoryApp extends Application {
         grid.setHgap(SPACING);
 
         // Populate grid with cards
-        for (String[] cardPair : cardStrings) {
-            Card c1 = new Card(cardPair[0]);
-            Card c2 = new Card(cardPair[1]);
+        int row = 0;
+        int col = 0;
+        for (int i = 0; i < cardStrings.size(); i++) {
+            Card c1 = new Card(cardStrings.get(i)[0]);
+            Card c2 = new Card(cardStrings.get(i)[1]);
             c1.setPair(c2);
             c2.setPair(c1);
-            grid.getChildren().addAll(c1, c2);
+            grid.add(c1, col++, row);
+            grid.add(c2, col++, row);
+            
+            if (col >= 4) {
+                col = 0;
+                row++;
+            }
         }
+        for (int i = 0; i < 4; i++) {
+            ColumnConstraints cc = new ColumnConstraints();
+            cc.setPercentWidth(22);
+            cc.setHgrow(Priority.ALWAYS);
+            cc.setFillWidth(true);
+            grid.getColumnConstraints().add(cc);
+        }
+        for (int i = 0; i < row; i++) {
+            RowConstraints rc = new RowConstraints();
+            rc.setPercentHeight(15);
+            rc.setVgrow(Priority.ALWAYS);
+            rc.setFillHeight(true);
+            grid.getRowConstraints().add(rc);
+        }
+
         return grid;
     }
 
@@ -129,6 +148,7 @@ public class MemoryApp extends Application {
             c2.setPair(c1);
             tiles.getChildren().addAll(c1,c2);
         }
+        randomiseTiles(tiles.getChildren());
         return tiles;
     }
 
@@ -197,7 +217,7 @@ public class MemoryApp extends Application {
      * 
      * @param nodes Nodes to randomise order of.
      */
-    private void randomise(ObservableList<Node> nodes) {
+    private void randomiseTiles(ObservableList<Node> nodes) {
         Random randomGenerator = new Random();
         Card nullCard = new Card(""); // Place holder while nodes are switched.
         for (int i = 0; i < nodes.size(); i++) {
@@ -218,14 +238,17 @@ public class MemoryApp extends Application {
      * - Get added to clicked list
      * - Go into selected mode
      */
-    private void setCardsActions() {
+    private void configureCards() {
         ObservableList<Node> nodes = layout.getChildren();
         for(Node node : nodes) {
             if (node instanceof Card) {
                 Card c = (Card) node;
 
+                // When card clicked on
                 c.setOnAction(e -> {
-                    if (canSelect) {
+                    if (clicked.contains(c)) {
+                        System.out.println("Card already selected");
+                    } else if (canSelect) {
                         System.out.print(c.getText());
                         clicked.add(c);
                         c.setSelected(true);
@@ -234,9 +257,36 @@ public class MemoryApp extends Application {
                         System.out.println("Must deselect cards first");
                     }
                 });
+
+                c.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                c.setWrapText(true);
             } else {
                 System.out.println(node.getClass());
             }
         }
+    }
+
+    /**
+     * Configure the hide all card.
+     */
+    private void configureHideAllCard () {
+        hideAll = new VisibleCard("Flip selected cards");
+        hideAll.setDisable(true); // Can't press until two cards to unflip.
+        hideAll.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Fill row and col
+        hideAll.setOnAction(e -> {
+            System.out.println("-Hiding selected cards-");
+            for (int i = 0; i < 2; i++) {
+                clicked.get(0).setSelected(false);
+                clicked.remove(0);
+            }
+            hideAll.setDisable(true);
+            canSelect = true;
+        });
+
+        RowConstraints rc = new RowConstraints();
+        rc.setPercentHeight(7);
+        rc.setVgrow(Priority.ALWAYS);
+        rc.setFillHeight(true);
+        gridLayout.getRowConstraints().add(rc);
     }
 }
