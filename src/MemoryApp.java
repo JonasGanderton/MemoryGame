@@ -28,9 +28,13 @@ import javafx.stage.Stage;
  */
 public class MemoryApp extends Application {
 
-    private static final String BACKGROUND_STYLE = "-fx-background-color: DAE6F3;";
-    private static final String FILENAME = "cardPairs.txt";
+    private static final boolean SHOW_GRID_LINES = false;
+    private static final boolean CAN_RESIZE = false;
+    private static final int SCREEN_WIDTH = 650;
+    private static final int SCREEN_HEIGHT = 650;
     private static final int SPACING = 10;
+    private static final String FILENAME = "cardPairs.txt";
+    private static final String BACKGROUND_STYLE = "-fx-background-color: DAE6F3;";
 
     private Pane layout;
     private GridPane gridLayout;
@@ -54,11 +58,10 @@ public class MemoryApp extends Application {
         // Configure the scene and window
         configureLayout();
         canSelect = true;
-        scene = new Scene(layout, 650, 600);
-        window.setResizable(false);
+        scene = new Scene(layout, SCREEN_WIDTH, SCREEN_HEIGHT);
+        window.setResizable(CAN_RESIZE);
         window.setScene(scene);
         window.setTitle("Memory game");
-
         window.show();
     }
 
@@ -93,6 +96,7 @@ public class MemoryApp extends Application {
         grid.setAlignment(Pos.CENTER);
         grid.setVgap(SPACING);
         grid.setHgap(SPACING);
+        grid.setGridLinesVisible(SHOW_GRID_LINES);
 
         // Populate grid with cards
         int row = 0;
@@ -110,6 +114,8 @@ public class MemoryApp extends Application {
                 row++;
             }
         }
+
+        // Set column constraints
         for (int i = 0; i < 4; i++) {
             ColumnConstraints cc = new ColumnConstraints();
             cc.setPercentWidth(22);
@@ -117,6 +123,8 @@ public class MemoryApp extends Application {
             cc.setFillWidth(true);
             grid.getColumnConstraints().add(cc);
         }
+
+        // Set row constraints
         for (int i = 0; i < row; i++) {
             RowConstraints rc = new RowConstraints();
             rc.setPercentHeight(15);
