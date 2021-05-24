@@ -16,6 +16,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.TilePane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 /**
@@ -29,6 +31,7 @@ import javafx.stage.Stage;
 public class MemoryApp extends Application {
 
     private static final boolean SHOW_GRID_LINES = false;
+    private static final boolean SHOW_MINOR_GRID_LINES = true;
     private static final boolean CAN_RESIZE = false;
     private static final int SCREEN_WIDTH = 650;
     private static final int SCREEN_HEIGHT = 650;
@@ -70,8 +73,8 @@ public class MemoryApp extends Application {
      */
     private void configureLayout() throws FileNotFoundException {
         // Add cards
-        gridLayout = addGridPane(readCardStrings(FILENAME));
-        tileLayout = addTilePane(readCardStrings(FILENAME));
+        gridLayout = configurGridPane(readCardStrings(FILENAME));
+        tileLayout = configureTilePane(readCardStrings(FILENAME));
         layout = gridLayout;
         configureCards();
 
@@ -83,6 +86,7 @@ public class MemoryApp extends Application {
         configureHideAllCard();
         tileLayout.getChildren().add(hideAll);
         gridLayout.add(hideAll, 1, gridLayout.getRowCount() - 1, 2, 1);
+        configurePlayersPane();
     }
 
     /**
@@ -91,7 +95,7 @@ public class MemoryApp extends Application {
      * 
      * @return GridPane.
      */
-    private GridPane addGridPane(ArrayList<String[]> cardStrings) {
+    private GridPane configurGridPane(ArrayList<String[]> cardStrings) {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setVgap(SPACING);
@@ -142,7 +146,7 @@ public class MemoryApp extends Application {
      * 
      * @return TilePane.
      */
-    private TilePane addTilePane(ArrayList<String[]> cardStrings) {
+    private TilePane configureTilePane(ArrayList<String[]> cardStrings) {
         TilePane tiles = new TilePane();
         tiles.setAlignment(Pos.CENTER);
         tiles.setVgap(SPACING);
@@ -277,7 +281,7 @@ public class MemoryApp extends Application {
     /**
      * Configure the hide all card.
      */
-    private void configureHideAllCard () {
+    private void configureHideAllCard() {
         hideAll = new VisibleCard("Flip selected cards");
         hideAll.setDisable(true); // Can't press until two cards to unflip.
         hideAll.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Fill row and col
@@ -296,5 +300,44 @@ public class MemoryApp extends Application {
         rc.setVgrow(Priority.ALWAYS);
         rc.setFillHeight(true);
         gridLayout.getRowConstraints().add(rc);
+    }
+
+    private void configurePlayersPane() {
+        GridPane playersPane = new GridPane();
+        playersPane.setAlignment(Pos.CENTER);
+        playersPane.setVgap(SPACING);
+        playersPane.setHgap(SPACING);
+        playersPane.setGridLinesVisible(SHOW_MINOR_GRID_LINES);
+
+        // Players
+        Text[] players = new Text[2];
+        Text p1 = new Text("Player 1");
+        Text p2 = new Text("Player 2");
+        players[0] = p1;
+        players[1] = p2;
+
+        for (Text p : players) {
+            p.setTextAlignment(TextAlignment.CENTER);
+            p.setStyle("-fx-background-color: #00B299;-fx-text-fill: #004040;-fx-font-size: 16px;");
+        }
+
+        playersPane.add(p1, 0, 0);
+        playersPane.add(p2, 2, 0);
+
+        for (int i = 0; i < 3; i++) {
+            ColumnConstraints cc = new ColumnConstraints();
+            cc.setPercentWidth(33);
+            cc.setHgrow(Priority.ALWAYS);
+            cc.setFillWidth(true);
+            playersPane.getColumnConstraints().add(cc);
+        }
+
+        RowConstraints rc = new RowConstraints();
+        rc.setPercentHeight(20);
+        rc.setVgrow(Priority.ALWAYS);
+        rc.setFillHeight(true);
+        playersPane.getRowConstraints().add(rc);
+
+        gridLayout.add(playersPane, 0, gridLayout.getRowCount(), 4, 2);
     }
 }
