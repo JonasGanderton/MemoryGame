@@ -28,8 +28,7 @@ public class Card extends Button {
         super(text);
         selected = false;
         setStyle(HIDDEN_STYLE);
-
-        this.setActions();
+        setActions();
         
     }
 

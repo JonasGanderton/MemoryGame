@@ -16,8 +16,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.TilePane;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 /**
@@ -31,19 +29,22 @@ import javafx.stage.Stage;
 public class MemoryApp extends Application {
 
     private static final boolean SHOW_GRID_LINES = false;
-    private static final boolean SHOW_MINOR_GRID_LINES = true;
+    private static final boolean SHOW_MINOR_GRID_LINES = false;
     private static final boolean CAN_RESIZE = false;
     private static final int SCREEN_WIDTH = 650;
     private static final int SCREEN_HEIGHT = 650;
     private static final int SPACING = 10;
     private static final String FILENAME = "cardPairs.txt";
     private static final String BACKGROUND_STYLE = "-fx-background-color: DAE6F3;";
+    private static final String PLAYER_ONE_NAME = "Jonas";
+    private static final String PLAYER_TWO_NAME = "Katharina";
 
     private Pane layout;
     private GridPane gridLayout;
     private TilePane tileLayout;
     private Scene scene;
     private VisibleCard hideAll;
+    private PlayerCard[] players = new PlayerCard[2];
     private Boolean canSelect;
     private ArrayList<Card> clicked = new ArrayList<>();
     
@@ -215,6 +216,7 @@ public class MemoryApp extends Application {
                 clicked.remove(0);
                 clicked.remove(0);
                 canSelect = true;
+                players[0].incrementScore(); //TODO: Controller
             } else {
                 System.out.println(" Not a pair");
                 clicked.get(1).setSelected(true);
@@ -284,7 +286,7 @@ public class MemoryApp extends Application {
     private void configureHideAllCard() {
         hideAll = new VisibleCard("Flip selected cards");
         hideAll.setDisable(true); // Can't press until two cards to unflip.
-        hideAll.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Fill row and col
+        hideAll.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Fill row and column
         hideAll.setOnAction(e -> {
             System.out.println("-Hiding selected cards-");
             for (int i = 0; i < 2; i++) {
@@ -302,42 +304,37 @@ public class MemoryApp extends Application {
         gridLayout.getRowConstraints().add(rc);
     }
 
+    /**
+     * Configure the player pane.
+     */
     private void configurePlayersPane() {
         GridPane playersPane = new GridPane();
         playersPane.setAlignment(Pos.CENTER);
         playersPane.setVgap(SPACING);
         playersPane.setHgap(SPACING);
         playersPane.setGridLinesVisible(SHOW_MINOR_GRID_LINES);
+        gridLayout.add(playersPane, 0, gridLayout.getRowCount(), 4, 1);
 
         // Players
-        Text[] players = new Text[2];
-        Text p1 = new Text("Player 1");
-        Text p2 = new Text("Player 2");
-        players[0] = p1;
-        players[1] = p2;
-
-        for (Text p : players) {
-            p.setTextAlignment(TextAlignment.CENTER);
-            p.setStyle("-fx-background-color: #00B299;-fx-text-fill: #004040;-fx-font-size: 16px;");
-        }
-
+        PlayerCard p1 = new PlayerCard(PLAYER_ONE_NAME);
+        PlayerCard p2 = new PlayerCard(PLAYER_TWO_NAME);
         playersPane.add(p1, 0, 0);
         playersPane.add(p2, 2, 0);
+        players[0] = p1;
+        players[1] = p2;
+    
+        for (PlayerCard vc : players) {
+            vc.setDisable(false);
+            vc.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Fill row and column
+        }
 
+        // Set column sizes
         for (int i = 0; i < 3; i++) {
             ColumnConstraints cc = new ColumnConstraints();
-            cc.setPercentWidth(33);
+            cc.setPercentWidth(25);
             cc.setHgrow(Priority.ALWAYS);
             cc.setFillWidth(true);
             playersPane.getColumnConstraints().add(cc);
         }
-
-        RowConstraints rc = new RowConstraints();
-        rc.setPercentHeight(20);
-        rc.setVgrow(Priority.ALWAYS);
-        rc.setFillHeight(true);
-        playersPane.getRowConstraints().add(rc);
-
-        gridLayout.add(playersPane, 0, gridLayout.getRowCount(), 4, 2);
     }
 }
