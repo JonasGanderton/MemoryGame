@@ -39,11 +39,12 @@ public class MemoryApp extends Application {
     private static final String PLAYER_ONE_NAME = "Jonas";
     private static final String PLAYER_TWO_NAME = "Katharina";
 
+    private Scene scene;
     private Pane layout;
     private GridPane gridLayout;
     private TilePane tileLayout;
-    private Scene scene;
     private VisibleCard hideAll;
+    private int currentPlayer;
     private PlayerCard[] players = new PlayerCard[2];
     private Boolean canSelect;
     private ArrayList<Card> clicked = new ArrayList<>();
@@ -62,6 +63,9 @@ public class MemoryApp extends Application {
         // Configure the scene and window
         configureLayout();
         canSelect = true;
+        Random r = new Random();
+        currentPlayer = r.nextInt(2); // 0 or 1
+        switchPlayer();
         scene = new Scene(layout, SCREEN_WIDTH, SCREEN_HEIGHT);
         window.setResizable(CAN_RESIZE);
         window.setScene(scene);
@@ -75,7 +79,6 @@ public class MemoryApp extends Application {
     private void configureLayout() throws FileNotFoundException {
         // Add cards
         gridLayout = configurGridPane(readCardStrings(FILENAME));
-        tileLayout = configureTilePane(readCardStrings(FILENAME));
         layout = gridLayout;
         configureCards();
 
@@ -142,30 +145,6 @@ public class MemoryApp extends Application {
     }
 
     /**
-     * Test using a tile pane for cards.
-     * Automatically fills tiles in order (1D array).
-     * 
-     * @return TilePane.
-     */
-    private TilePane configureTilePane(ArrayList<String[]> cardStrings) {
-        TilePane tiles = new TilePane();
-        tiles.setAlignment(Pos.CENTER);
-        tiles.setVgap(SPACING);
-        tiles.setHgap(SPACING);
-
-        // Populate tiles with cards
-        for (String[] cardPair : cardStrings) {
-            Card c1 = new Card(cardPair[0]);
-            Card c2 = new Card(cardPair[1]);
-            c1.setPair(c2);
-            c2.setPair(c1);
-            tiles.getChildren().addAll(c1,c2);
-        }
-        randomiseTiles(tiles.getChildren());
-        return tiles;
-    }
-
-    /**
      * Reads text from a file.
      * 
      * Expected format : <card1a>,<card1b><\n><card2a>,<card2b><\n><...>
@@ -216,33 +195,13 @@ public class MemoryApp extends Application {
                 clicked.remove(0);
                 clicked.remove(0);
                 canSelect = true;
-                players[0].incrementScore(); //TODO: Controller
+                players[currentPlayer].incrementScore();
             } else {
                 System.out.println(" Not a pair");
                 clicked.get(1).setSelected(true);
                 hideAll.setDisable(false);
                 canSelect = false;
             }
-        }
-    }
-
-    /**
-     * Randomise the order of nodes in an ObservableList.
-     * 
-     * @param nodes Nodes to randomise order of.
-     */
-    private void randomiseTiles(ObservableList<Node> nodes) {
-        Random randomGenerator = new Random();
-        Card nullCard = new Card(""); // Place holder while nodes are switched.
-        for (int i = 0; i < nodes.size(); i++) {
-            int randomPos = randomGenerator.nextInt(nodes.size());
-
-            // Need two temps, as can't have duplicates in ObservableList.
-            Node tempA = nodes.get(i);
-            Node tempB = nodes.get(randomPos);
-            nodes.set(i, nullCard);
-            nodes.set(randomPos, tempA);
-            nodes.set(i, tempB);
         }
     }
 
@@ -293,6 +252,8 @@ public class MemoryApp extends Application {
                 clicked.get(0).setSelected(false);
                 clicked.remove(0);
             }
+            switchPlayer();
+
             hideAll.setDisable(true);
             canSelect = true;
         });
@@ -336,5 +297,42 @@ public class MemoryApp extends Application {
             cc.setFillWidth(true);
             playersPane.getColumnConstraints().add(cc);
         }
+    }
+
+    /**
+     * Switch the current player.
+     */
+    private void switchPlayer() {
+        players[currentPlayer].setDisable(true);
+        if (currentPlayer == 0) {
+            currentPlayer = 1;
+        } else {
+            currentPlayer = 0;
+        }
+        players[currentPlayer].setDisable(false);
+    }
+
+    /**
+     * Randomise the order of nodes in an ObservableList.
+     * 
+     * @param nodes Nodes to randomise order of.
+     */
+    private void randomiseTiles(ObservableList<Node> nodes) {
+        Random randomGenerator = new Random();
+        Card nullCard = new Card(""); // Place holder while nodes are switched.
+        for (int i = 0; i < nodes.size(); i++) {
+            int randomPos = randomGenerator.nextInt(nodes.size());
+
+            // Need two temps, as can't have duplicates in ObservableList.
+            Node tempA = nodes.get(i);
+            Node tempB = nodes.get(randomPos);
+            nodes.set(i, nullCard);
+            nodes.set(randomPos, tempA);
+            nodes.set(i, tempB);
+        }
+    }
+
+    private void randomiseCards() {
+        //TODO: Implement card mixing
     }
 }
