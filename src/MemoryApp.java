@@ -15,7 +15,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 
 /**
@@ -42,7 +41,6 @@ public class MemoryApp extends Application {
     private Scene scene;
     private Pane layout;
     private GridPane gridLayout;
-    private TilePane tileLayout;
     private VisibleCard hideAll;
     private int currentPlayer;
     private PlayerCard[] players = new PlayerCard[2];
@@ -81,6 +79,7 @@ public class MemoryApp extends Application {
         gridLayout = configurGridPane(readCardStrings(FILENAME));
         layout = gridLayout;
         configureCards();
+        //randomiseCards();
 
         // Some layout settings
         layout.setStyle(BACKGROUND_STYLE);
@@ -88,7 +87,6 @@ public class MemoryApp extends Application {
 
         // Add hide all card
         configureHideAllCard();
-        tileLayout.getChildren().add(hideAll);
         gridLayout.add(hideAll, 1, gridLayout.getRowCount() - 1, 2, 1);
         configurePlayersPane();
     }
@@ -107,19 +105,37 @@ public class MemoryApp extends Application {
         grid.setGridLinesVisible(SHOW_GRID_LINES);
 
         // Populate grid with cards
-        int row = 0;
-        int col = 0;
+        int cols = 4;
+        int rows = cardStrings.size() * 2 / cols + ((cardStrings.size() * 2 % cols != 0) ? 1 : 0);
+        System.out.println(rows);
+        ArrayList<ArrayList<Card>> cards = new ArrayList<>();
+        for (int i = 0; i < rows; i++) {
+            cards.add(new ArrayList<Card>());
+        }
+        Random random = new Random();
         for (int i = 0; i < cardStrings.size(); i++) {
             Card c1 = new Card(cardStrings.get(i)[0]);
             Card c2 = new Card(cardStrings.get(i)[1]);
             c1.setPair(c2);
             c2.setPair(c1);
-            grid.add(c1, col++, row);
-            grid.add(c2, col++, row);
-            
-            if (col >= 4) {
-                col = 0;
-                row++;
+
+            int nextRow;
+            // Card 1
+            do {
+                nextRow = random.nextInt(rows);
+            } while (cards.get(nextRow).size() >= cols);
+            cards.get(nextRow).add(c1);
+
+            // Card 2
+            do {
+                nextRow = random.nextInt(rows);
+            } while (cards.get(nextRow).size() >= cols);
+            cards.get(nextRow).add(c2);
+        }
+
+        for (int i = 0; i < cards.size(); i++) {
+            for (int j = 0; j < cards.get(i).size(); j++) {
+                grid.add(cards.get(i).get(j), j, i);
             }
         }
 
@@ -133,7 +149,7 @@ public class MemoryApp extends Application {
         }
 
         // Set row constraints
-        for (int i = 0; i < row; i++) {
+        for (int i = 0; i < rows; i++) {
             RowConstraints rc = new RowConstraints();
             rc.setPercentHeight(15);
             rc.setVgrow(Priority.ALWAYS);
@@ -189,7 +205,7 @@ public class MemoryApp extends Application {
     private void checkClicked() {
         if (clicked.size() == 2) {
             if (clicked.get(0).getPair() == clicked.get(1)) {
-                System.out.println(" Pair found!");
+                //System.out.println(" Pair found!");
                 clicked.get(0).setDisable(true);
                 clicked.get(1).setDisable(true);
                 clicked.remove(0);
@@ -197,7 +213,7 @@ public class MemoryApp extends Application {
                 canSelect = true;
                 players[currentPlayer].incrementScore();
             } else {
-                System.out.println(" Not a pair");
+                //System.out.println(" Not a pair");
                 clicked.get(1).setSelected(true);
                 hideAll.setDisable(false);
                 canSelect = false;
@@ -220,14 +236,14 @@ public class MemoryApp extends Application {
                 // When card clicked on
                 c.setOnAction(e -> {
                     if (clicked.contains(c)) {
-                        System.out.println("Card already selected");
+                        //System.out.println("Card already selected");
                     } else if (canSelect) {
-                        System.out.print(c.getText());
+                        //System.out.print(c.getText());
                         clicked.add(c);
                         c.setSelected(true);
                         checkClicked();
                     } else {
-                        System.out.println("Must deselect cards first");
+                        //System.out.println("Must deselect cards first");
                     }
                 });
 
@@ -310,29 +326,5 @@ public class MemoryApp extends Application {
             currentPlayer = 0;
         }
         players[currentPlayer].setDisable(false);
-    }
-
-    /**
-     * Randomise the order of nodes in an ObservableList.
-     * 
-     * @param nodes Nodes to randomise order of.
-     */
-    private void randomiseTiles(ObservableList<Node> nodes) {
-        Random randomGenerator = new Random();
-        Card nullCard = new Card(""); // Place holder while nodes are switched.
-        for (int i = 0; i < nodes.size(); i++) {
-            int randomPos = randomGenerator.nextInt(nodes.size());
-
-            // Need two temps, as can't have duplicates in ObservableList.
-            Node tempA = nodes.get(i);
-            Node tempB = nodes.get(randomPos);
-            nodes.set(i, nullCard);
-            nodes.set(randomPos, tempA);
-            nodes.set(i, tempB);
-        }
-    }
-
-    private void randomiseCards() {
-        //TODO: Implement card mixing
     }
 }
