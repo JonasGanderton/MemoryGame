@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -79,7 +80,6 @@ public class MemoryApp extends Application {
         gridLayout = configurGridPane(readCardStrings(FILENAME));
         layout = gridLayout;
         configureCards();
-        //randomiseCards();
 
         // Some layout settings
         layout.setStyle(BACKGROUND_STYLE);
@@ -104,38 +104,27 @@ public class MemoryApp extends Application {
         grid.setHgap(SPACING);
         grid.setGridLinesVisible(SHOW_GRID_LINES);
 
-        // Populate grid with cards
+        // Grid size
         int cols = 4;
-        int rows = cardStrings.size() * 2 / cols + ((cardStrings.size() * 2 % cols != 0) ? 1 : 0);
-        System.out.println(rows);
-        ArrayList<ArrayList<Card>> cards = new ArrayList<>();
-        for (int i = 0; i < rows; i++) {
-            cards.add(new ArrayList<Card>());
-        }
-        Random random = new Random();
+        int cardNum = cardStrings.size() * 2;
+        int rows = cardNum / cols + ((cardNum % cols != 0) ? 1 : 0);
+
+        // Add cards to ArrayList to shuffen
+        ArrayList<Card> allCards = new ArrayList<>();
         for (int i = 0; i < cardStrings.size(); i++) {
             Card c1 = new Card(cardStrings.get(i)[0]);
             Card c2 = new Card(cardStrings.get(i)[1]);
             c1.setPair(c2);
             c2.setPair(c1);
-
-            int nextRow;
-            // Card 1
-            do {
-                nextRow = random.nextInt(rows);
-            } while (cards.get(nextRow).size() >= cols);
-            cards.get(nextRow).add(c1);
-
-            // Card 2
-            do {
-                nextRow = random.nextInt(rows);
-            } while (cards.get(nextRow).size() >= cols);
-            cards.get(nextRow).add(c2);
+            allCards.add(c1);
+            allCards.add(c2);
         }
+        Collections.shuffle(allCards);
 
-        for (int i = 0; i < cards.size(); i++) {
-            for (int j = 0; j < cards.get(i).size(); j++) {
-                grid.add(cards.get(i).get(j), j, i);
+        // Add cards to grid.
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                grid.add(allCards.get(r*(rows-1) + c), c, r);
             }
         }
 
@@ -263,7 +252,7 @@ public class MemoryApp extends Application {
         hideAll.setDisable(true); // Can't press until two cards to unflip.
         hideAll.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Fill row and column
         hideAll.setOnAction(e -> {
-            System.out.println("-Hiding selected cards-");
+            //System.out.println("-Hiding selected cards-");
             for (int i = 0; i < 2; i++) {
                 clicked.get(0).setSelected(false);
                 clicked.remove(0);
