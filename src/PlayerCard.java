@@ -17,6 +17,14 @@ public class PlayerCard extends VisibleCard {
         refreshText();
     }
 
+    public void setPlayer(int playerNum) {
+        if (playerNum == 1) {
+            setStyle(PLAYER_ONE_STYLE);
+        } else if (playerNum == 2) {
+            setStyle(PLAYER_TWO_STYLE);
+        }
+    }
+
     /**
      * Increment score.
      */

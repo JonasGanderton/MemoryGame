@@ -193,11 +193,11 @@ public class MemoryApp extends Application {
     private void checkClicked() {
         if (clicked.size() == 2) {
             if (clicked.get(0).getPair() == clicked.get(1)) {
-                //System.out.println(" Pair found!");
-                clicked.get(0).setDisable(true);
-                clicked.get(1).setDisable(true);
-                clicked.remove(0);
-                clicked.remove(0);
+                for (int i = 0; i < 2; i++) {
+                    clicked.get(0).selectedByPlayer(currentPlayer);
+                    clicked.get(0).setDisable(true);
+                    clicked.remove(0);
+                }
                 canSelect = true;
                 players[currentPlayer].incrementScore();
                 pairsRemaining--;
@@ -205,7 +205,6 @@ public class MemoryApp extends Application {
                     gameEnd();
                 }
             } else {
-                //System.out.println(" Not a pair");
                 clicked.get(1).setSelected(true);
                 hideAll.setDisable(false);
                 canSelect = false;
@@ -281,6 +280,8 @@ public class MemoryApp extends Application {
     private void configurePlayers() {
         PlayerCard p1 = new PlayerCard(PLAYER_ONE_NAME);
         PlayerCard p2 = new PlayerCard(PLAYER_TWO_NAME);
+        p1.setPlayer(1);
+        p2.setPlayer(2);
         players[0] = p1;
         players[1] = p2;
         
