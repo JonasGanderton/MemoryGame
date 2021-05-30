@@ -34,7 +34,7 @@ public class MemoryApp extends Application {
     private static final int SCREEN_WIDTH = 650;
     private static final int SCREEN_HEIGHT = 650;
     private static final int SPACING = 10;
-    private static final String FILENAME = "cardPairs.txt";
+    private static final String FILENAME = "quickTest.txt";
     private static final String BACKGROUND_STYLE = "-fx-background-color: DAE6F3;";
     private static final String PLAYER_ONE_NAME = "Jonas";
     private static final String PLAYER_TWO_NAME = "Katharina";
@@ -44,9 +44,11 @@ public class MemoryApp extends Application {
     private GridPane gridLayout;
     private VisibleCard hideAll;
     private int currentPlayer;
+    private int pairsRemaining;
     private PlayerCard[] players = new PlayerCard[2];
     private Boolean canSelect;
     private ArrayList<Card> clicked = new ArrayList<>();
+    private Stage window;
     
     public static void main(String[] args) {
         launch(args);
@@ -60,16 +62,12 @@ public class MemoryApp extends Application {
     @Override
     public void start(Stage window) throws FileNotFoundException {
         // Configure the scene and window
-        configureLayout();
-        canSelect = true;
+        this.window = window;
+        configurePlayers();
         Random r = new Random();
         currentPlayer = r.nextInt(2); // 0 or 1
         switchPlayer();
-        scene = new Scene(layout, SCREEN_WIDTH, SCREEN_HEIGHT);
-        window.setResizable(CAN_RESIZE);
-        window.setScene(scene);
-        window.setTitle("Memory game");
-        window.show();
+        configureGame();
     }
 
     /**
@@ -184,7 +182,8 @@ public class MemoryApp extends Application {
         //for (String[] strings : cardPairs) {
         //    System.out.println(strings[0] + " " + strings[1]);
         //}
-        
+
+        pairsRemaining = cardPairs.size();
         return cardPairs;
     }
 
@@ -201,6 +200,10 @@ public class MemoryApp extends Application {
                 clicked.remove(0);
                 canSelect = true;
                 players[currentPlayer].incrementScore();
+                pairsRemaining--;
+                if (pairsRemaining == 0) {
+                    gameEnd();
+                }
             } else {
                 //System.out.println(" Not a pair");
                 clicked.get(1).setSelected(true);
@@ -271,6 +274,20 @@ public class MemoryApp extends Application {
     }
 
     /**
+     * Create the players
+     */
+    private void configurePlayers() {
+        PlayerCard p1 = new PlayerCard(PLAYER_ONE_NAME);
+        PlayerCard p2 = new PlayerCard(PLAYER_TWO_NAME);
+        players[0] = p1;
+        players[1] = p2;
+        
+        for (PlayerCard pc : players) {
+            pc.setDisable(false);
+            pc.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Fill row and column
+        }
+    }
+    /**
      * Configure the player pane.
      */
     private void configurePlayersPane() {
@@ -279,20 +296,10 @@ public class MemoryApp extends Application {
         playersPane.setVgap(SPACING);
         playersPane.setHgap(SPACING);
         playersPane.setGridLinesVisible(SHOW_MINOR_GRID_LINES);
+        playersPane.add(players[0], 0, 0);
+        playersPane.add(players[1], 2, 0);
         gridLayout.add(playersPane, 0, gridLayout.getRowCount(), 4, 1);
 
-        // Players
-        PlayerCard p1 = new PlayerCard(PLAYER_ONE_NAME);
-        PlayerCard p2 = new PlayerCard(PLAYER_TWO_NAME);
-        playersPane.add(p1, 0, 0);
-        playersPane.add(p2, 2, 0);
-        players[0] = p1;
-        players[1] = p2;
-    
-        for (PlayerCard vc : players) {
-            vc.setDisable(false);
-            vc.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Fill row and column
-        }
 
         // Set column sizes
         for (int i = 0; i < 3; i++) {
@@ -315,5 +322,49 @@ public class MemoryApp extends Application {
             currentPlayer = 0;
         }
         players[currentPlayer].setDisable(false);
+    }
+
+    /**
+     * Change player scores at game end.
+     * Sets the player for the next game.
+     * Restarts the game.
+     */
+    private void gameEnd() {
+        if (players[0].getScore() > players[1].getScore()) {
+            players[0].incrementGamesWon();
+            currentPlayer = 1;
+        } else if (players[0].getScore() < players[1].getScore()) {
+            players[1].incrementGamesWon();
+            currentPlayer = 0;
+        } else {
+            players[0].incrementGamesWon();
+            players[1].incrementGamesWon();
+            switchPlayer();
+        }
+        configureGame();
+    }
+
+    /**
+     * Configure the game.
+     */
+    private void configureGame() {
+        players[0].resetScore();
+        players[1].resetScore();
+
+        try {
+            configureLayout();
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+            System.exit(0);
+        }
+        
+        canSelect = true;
+        System.out.println("2");
+        scene = new Scene(layout, SCREEN_WIDTH, SCREEN_HEIGHT);
+        window.setResizable(CAN_RESIZE);
+        window.setScene(scene);
+        window.setTitle("Memory game");
+        window.show();
+        System.out.println("3");
     }
 }
