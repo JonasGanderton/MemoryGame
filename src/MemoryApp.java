@@ -34,7 +34,7 @@ public class MemoryApp extends Application {
     private static final int SCREEN_WIDTH = 650;
     private static final int SCREEN_HEIGHT = 650;
     private static final int SPACING = 10;
-    private static final String FILENAME = "quickTest.txt";
+    private static final String FILENAME = "cardPairs.txt";
     private static final String BACKGROUND_STYLE = "-fx-background-color: DAE6F3;";
     private static final String PLAYER_ONE_NAME = "Jonas";
     private static final String PLAYER_TWO_NAME = "Katharina";
@@ -332,10 +332,14 @@ public class MemoryApp extends Application {
     private void gameEnd() {
         if (players[0].getScore() > players[1].getScore()) {
             players[0].incrementGamesWon();
-            currentPlayer = 1;
+            if (currentPlayer == 0) {
+                switchPlayer();
+            }
         } else if (players[0].getScore() < players[1].getScore()) {
             players[1].incrementGamesWon();
-            currentPlayer = 0;
+            if (currentPlayer == 1) {
+                switchPlayer();
+            }
         } else {
             players[0].incrementGamesWon();
             players[1].incrementGamesWon();
