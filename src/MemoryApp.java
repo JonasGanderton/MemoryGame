@@ -255,13 +255,15 @@ public class MemoryApp extends Application {
         hideAll.setDisable(true); // Can't press until two cards to unflip.
         hideAll.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Fill row and column
         hideAll.setOnAction(e -> {
-            //System.out.println("-Hiding selected cards-");
-            for (int i = 0; i < 2; i++) {
-                clicked.get(0).setSelected(false);
-                clicked.remove(0);
+            if (pairsRemaining > 0) {
+                for (int i = 0; i < 2; i++) {
+                    clicked.get(0).setSelected(false);
+                    clicked.remove(0);
+                }
+                switchPlayer();
+            } else {
+                configureGame();
             }
-            switchPlayer();
-
             hideAll.setDisable(true);
             canSelect = true;
         });
@@ -345,7 +347,8 @@ public class MemoryApp extends Application {
             players[1].incrementGamesWon();
             switchPlayer();
         }
-        configureGame();
+        hideAll.setText("Play again");
+        hideAll.setDisable(false);
     }
 
     /**
@@ -361,14 +364,12 @@ public class MemoryApp extends Application {
             System.out.println(e);
             System.exit(0);
         }
-        
+        hideAll.setText("Flip selected cards");
         canSelect = true;
-        System.out.println("2");
         scene = new Scene(layout, SCREEN_WIDTH, SCREEN_HEIGHT);
         window.setResizable(CAN_RESIZE);
         window.setScene(scene);
         window.setTitle("Memory game");
         window.show();
-        System.out.println("3");
     }
 }
