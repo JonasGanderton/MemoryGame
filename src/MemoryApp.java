@@ -11,6 +11,12 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -30,12 +36,12 @@ public class MemoryApp extends Application {
 
     private static final boolean SHOW_GRID_LINES = false;
     private static final boolean SHOW_MINOR_GRID_LINES = false;
-    private static final boolean CAN_RESIZE = false;
-    private static final int SCREEN_WIDTH = 650;
-    private static final int SCREEN_HEIGHT = 650;
+    private static final boolean CAN_RESIZE = true;
+    private static final int SCREEN_WIDTH = 680;
+    private static final int SCREEN_HEIGHT = 630;
     private static final int SPACING = 10;
     private static final String FILENAME = "cardPairs.txt";
-    private static final String BACKGROUND_STYLE = "-fx-background-color: DAE6F3;";
+    private static final String BACKGROUND_STYLE = "-fx-background-color: DAE603;";
     private static final String PLAYER_ONE_NAME = "Jonas";
     private static final String PLAYER_TWO_NAME = "Katharina";
 
@@ -80,7 +86,7 @@ public class MemoryApp extends Application {
         configureCards();
 
         // Some layout settings
-        layout.setStyle(BACKGROUND_STYLE);
+        //layout.setStyle(BACKGROUND_STYLE); // Uncomment if no other background
         layout.setPadding(new Insets(SPACING)); // If all different: ^ > v <
 
         // Add hide all card
@@ -368,6 +374,11 @@ public class MemoryApp extends Application {
         hideAll.setText("Flip selected cards");
         canSelect = true;
         scene = new Scene(layout, SCREEN_WIDTH, SCREEN_HEIGHT);
+        
+        layout.setBackground(new Background(new BackgroundImage(new Image(
+            "file:background.png", SCREEN_WIDTH, SCREEN_HEIGHT, true, false),
+            BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
+            BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
         window.setResizable(CAN_RESIZE);
         window.setScene(scene);
         window.setTitle("Memory game");
