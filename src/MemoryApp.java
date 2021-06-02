@@ -41,7 +41,7 @@ public class MemoryApp extends Application {
     private static final int SCREEN_HEIGHT = 630;
     private static final int SPACING = 10;
     private static final String FILENAME = "cardPairs.txt";
-    private static final String BACKGROUND_STYLE = "-fx-background-color: DAE603;";
+    private static final String BACKGROUND_STYLE = "-fx-background-color: #FFF49F;";
     private static final String PLAYER_ONE_NAME = "Jonas";
     private static final String PLAYER_TWO_NAME = "Katharina";
 
@@ -77,6 +77,33 @@ public class MemoryApp extends Application {
     }
 
     /**
+     * Configure the game.
+     */
+    private void configureGame() {
+        players[0].resetScore();
+        players[1].resetScore();
+
+        try {
+            configureLayout();
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+            System.exit(0);
+        }
+        hideAll.setText("Flip selected cards");
+        canSelect = true;
+        scene = new Scene(layout, SCREEN_WIDTH, SCREEN_HEIGHT);
+        
+        layout.setBackground(new Background(new BackgroundImage(new Image(
+            "file:background.png", SCREEN_WIDTH, SCREEN_HEIGHT, true, false),
+            BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
+            BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+        window.setResizable(CAN_RESIZE);
+        window.setScene(scene);
+        window.setTitle("Memory game");
+        window.show();
+    }
+
+    /**
      * Configures the layout for the cards.
      */
     private void configureLayout() throws FileNotFoundException {
@@ -86,7 +113,7 @@ public class MemoryApp extends Application {
         configureCards();
 
         // Some layout settings
-        //layout.setStyle(BACKGROUND_STYLE); // Uncomment if no other background
+        layout.setStyle(BACKGROUND_STYLE); // Uncomment if no other background
         layout.setPadding(new Insets(SPACING)); // If all different: ^ > v <
 
         // Add hide all card
@@ -126,9 +153,19 @@ public class MemoryApp extends Application {
         Collections.shuffle(allCards);
 
         // Add cards to grid.
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                grid.add(allCards.get(r*(rows-1) + c), c, r);
+        int r = 0;
+        int c = 0;
+        for (int i = 0; i < allCards.size(); i++) {
+            // Centre the final pair if on their own row
+            if (i == allCards.size() - 2 && c == 0) {
+                c++;
+            }
+            // Add card to grid
+            grid.add(allCards.get(i), c, r);
+            c++;
+            if (c >= cols) {
+                r++;
+                c = 0;
             }
         }
 
@@ -144,78 +181,13 @@ public class MemoryApp extends Application {
         // Set row constraints
         for (int i = 0; i < rows; i++) {
             RowConstraints rc = new RowConstraints();
-            rc.setPercentHeight(15);
+            rc.setPercentHeight(13);
             rc.setVgrow(Priority.ALWAYS);
             rc.setFillHeight(true);
             grid.getRowConstraints().add(rc);
         }
 
         return grid;
-    }
-
-    /**
-     * Reads text from a file.
-     * 
-     * Expected format : <card1a>,<card1b><\n><card2a>,<card2b><\n><...>
-     * Other format (card pairs with self) : <card1><\n><card2><\n><card3><\n><...>
-     * 
-     * @param filename File containing cards.
-     * @return Pairs of strings from the file.
-     * @throws FileNotFoundException File not found.
-     */
-    private ArrayList<String[]> readCardStrings (String filename) throws FileNotFoundException {
-        ArrayList<String[]> cardPairs = new ArrayList<>();
-        File data = new File(filename);
-        Scanner pairIn = new Scanner(data);
-
-        while (pairIn.hasNext()) {
-            // Get card pair
-            Scanner singleIn = new Scanner(pairIn.nextLine());
-            singleIn.useDelimiter(",");    
-
-            // Set the pair
-            String[] pair = new String[2];
-            pair[0] = singleIn.next();
-            if (singleIn.hasNext()) {
-                pair[1] = singleIn.next(); // If card has a pair.
-            } else {
-                pair[1] = pair[0]; // If not, duplicate card.
-            }
-            cardPairs.add(pair);
-        }
-        pairIn.close();
-
-        //for (String[] strings : cardPairs) {
-        //    System.out.println(strings[0] + " " + strings[1]);
-        //}
-
-        pairsRemaining = cardPairs.size();
-        return cardPairs;
-    }
-
-    /**
-     * Check to see if a pair has been found.
-     */
-    private void checkClicked() {
-        if (clicked.size() == 2) {
-            if (clicked.get(0).getPair() == clicked.get(1)) {
-                for (int i = 0; i < 2; i++) {
-                    clicked.get(0).selectedByPlayer(currentPlayer);
-                    clicked.get(0).setDisable(true);
-                    clicked.remove(0);
-                }
-                canSelect = true;
-                players[currentPlayer].incrementScore();
-                pairsRemaining--;
-                if (pairsRemaining == 0) {
-                    gameEnd();
-                }
-            } else {
-                clicked.get(1).setSelected(true);
-                hideAll.setDisable(false);
-                canSelect = false;
-            }
-        }
     }
 
     /**
@@ -296,6 +268,7 @@ public class MemoryApp extends Application {
             pc.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Fill row and column
         }
     }
+
     /**
      * Configure the player pane.
      */
@@ -317,6 +290,71 @@ public class MemoryApp extends Application {
             cc.setHgrow(Priority.ALWAYS);
             cc.setFillWidth(true);
             playersPane.getColumnConstraints().add(cc);
+        }
+    }
+
+    /**
+     * Reads text from a file.
+     * 
+     * Expected format : <card1a>,<card1b><\n><card2a>,<card2b><\n><...>
+     * Other format (card pairs with self) : <card1><\n><card2><\n><card3><\n><...>
+     * 
+     * @param filename File containing cards.
+     * @return Pairs of strings from the file.
+     * @throws FileNotFoundException File not found.
+     */
+    private ArrayList<String[]> readCardStrings (String filename) throws FileNotFoundException {
+        ArrayList<String[]> cardPairs = new ArrayList<>();
+        File data = new File(filename);
+        Scanner pairIn = new Scanner(data);
+
+        while (pairIn.hasNext()) {
+            // Get card pair
+            Scanner singleIn = new Scanner(pairIn.nextLine());
+            singleIn.useDelimiter(",");    
+
+            // Set the pair
+            String[] pair = new String[2];
+            pair[0] = singleIn.next();
+            if (singleIn.hasNext()) {
+                pair[1] = singleIn.next(); // If card has a pair.
+            } else {
+                pair[1] = pair[0]; // If not, duplicate card.
+            }
+            cardPairs.add(pair);
+        }
+        pairIn.close();
+
+        //for (String[] strings : cardPairs) {
+        //    System.out.println(strings[0] + " " + strings[1]);
+        //}
+
+        pairsRemaining = cardPairs.size();
+        return cardPairs;
+    }
+
+    /**
+     * Check to see if a pair has been found.
+     */
+    private void checkClicked() {
+        if (clicked.size() == 2) {
+            if (clicked.get(0).getPair() == clicked.get(1)) {
+                for (int i = 0; i < 2; i++) {
+                    clicked.get(0).selectedByPlayer(currentPlayer);
+                    clicked.get(0).setDisable(true);
+                    clicked.remove(0);
+                }
+                canSelect = true;
+                players[currentPlayer].incrementScore();
+                pairsRemaining--;
+                if (pairsRemaining == 0) {
+                    gameEnd();
+                }
+            } else {
+                clicked.get(1).setSelected(true);
+                hideAll.setDisable(false);
+                canSelect = false;
+            }
         }
     }
 
@@ -356,32 +394,5 @@ public class MemoryApp extends Application {
         }
         hideAll.setText("Play again");
         hideAll.setDisable(false);
-    }
-
-    /**
-     * Configure the game.
-     */
-    private void configureGame() {
-        players[0].resetScore();
-        players[1].resetScore();
-
-        try {
-            configureLayout();
-        } catch (FileNotFoundException e) {
-            System.out.println(e);
-            System.exit(0);
-        }
-        hideAll.setText("Flip selected cards");
-        canSelect = true;
-        scene = new Scene(layout, SCREEN_WIDTH, SCREEN_HEIGHT);
-        
-        layout.setBackground(new Background(new BackgroundImage(new Image(
-            "file:background.png", SCREEN_WIDTH, SCREEN_HEIGHT, true, false),
-            BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
-            BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-        window.setResizable(CAN_RESIZE);
-        window.setScene(scene);
-        window.setTitle("Memory game");
-        window.show();
     }
 }

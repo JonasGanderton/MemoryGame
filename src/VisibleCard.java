@@ -5,9 +5,6 @@
  */
 public class VisibleCard extends Card {
 
-    private static final String IDLE_STYLE = "-fx-background-color: #00B299;" + FONT_STYLE;
-    private static final String HOVER_STYLE = "-fx-background-color: #009279;" + FONT_STYLE;
-
     /**
      * Construct a visible card.
      * 

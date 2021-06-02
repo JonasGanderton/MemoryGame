@@ -11,14 +11,15 @@ import javafx.scene.control.Button;
 public class Card extends Button {
 
     protected static final String FONT_STYLE = "-fx-text-fill: #004040;-fx-font-size: 16px;";
-    protected static final String PLAYER_ONE_STYLE = "-fx-background-color: #26ABFF;" + FONT_STYLE;
-    protected static final String PLAYER_TWO_STYLE = "-fx-background-color: #E18AAA;" + FONT_STYLE;
-    private static final String HIDDEN_STYLE = "-fx-background-color: #00B299;-fx-text-fill: transparent;";
-    private static final String HOVER_STYLE = "-fx-background-color: #009279;-fx-text-fill: transparent;";
-    private static final String SELECTED_STYLE = "-fx-background-color: #00D2A9;" + FONT_STYLE;
+    protected static final String PLAYER_ONE_STYLE = "-fx-background-color: #A3DCFF;" + FONT_STYLE;
+    protected static final String PLAYER_TWO_STYLE = "-fx-background-color: #B4E8B3;" + FONT_STYLE;
+    protected static final String IDLE_STYLE = "-fx-background-color: #F8EB77;";
+    protected static final String HOVER_STYLE = "-fx-background-color: #FFFA99;";
+    protected static final String SELECTED_STYLE = "-fx-background-color: #FFE75C;" + FONT_STYLE;
+    private static final String HIDDEN_FONT_STYLE = "-fx-text-fill: transparent;";
 
-    private Card pair;
     protected boolean selected;
+    private Card pair;
     private int playerNum;
 
     /**
@@ -29,7 +30,7 @@ public class Card extends Button {
     public Card(String text) {
         super(text);
         selected = false;
-        setStyle(HIDDEN_STYLE);
+        setStyle(IDLE_STYLE + HIDDEN_FONT_STYLE);
         setActions();
         playerNum = -1;
     }
@@ -40,12 +41,12 @@ public class Card extends Button {
     private void setActions() {
         setOnMouseEntered(e -> {
             if (!selected) {
-                setStyle(HOVER_STYLE);
+                setStyle(HOVER_STYLE + HIDDEN_FONT_STYLE);
             }
         });
         setOnMouseExited(e -> {
             if (!selected) {
-                setStyle(HIDDEN_STYLE); // Currently scrolling over.
+                setStyle(IDLE_STYLE + HIDDEN_FONT_STYLE); // Currently scrolling over.
             } else {
                 // Has been clicked on too.
                 if (playerNum == 0) {
@@ -81,7 +82,7 @@ public class Card extends Button {
         if (selected) {
             setStyle(SELECTED_STYLE);
         } else {
-            setStyle(HIDDEN_STYLE);
+            setStyle(IDLE_STYLE + HIDDEN_FONT_STYLE);
         }
     }
 
@@ -89,7 +90,7 @@ public class Card extends Button {
      * Set the card to hover style.
      */
     public void setStyleHover() {
-        setStyle(HOVER_STYLE);
+        setStyle(HOVER_STYLE + HIDDEN_FONT_STYLE);
     }
 
     /**
