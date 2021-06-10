@@ -37,11 +37,11 @@ public class MemoryApp extends Application {
     private static final boolean SHOW_GRID_LINES = false;
     private static final boolean SHOW_MINOR_GRID_LINES = false;
     private static final boolean CAN_RESIZE = true;
+    private static final boolean QUICK_TEST = false;
     private static final int SCREEN_WIDTH = 680;
     private static final int SCREEN_HEIGHT = 630;
     private static final int SPACING = 10;
-    private static final String FILENAME = "cardPairs.txt";
-    private static final String BACKGROUND_STYLE = "-fx-background-color: #FFF49F;";
+    private static final String BACKGROUND_STYLE = "-fx-background-color: #FFF9AF;";
     private static final String PLAYER_ONE_NAME = "Jonas";
     private static final String PLAYER_TWO_NAME = "Katharina";
 
@@ -108,7 +108,7 @@ public class MemoryApp extends Application {
      */
     private void configureLayout() throws FileNotFoundException {
         // Add cards
-        gridLayout = configurGridPane(readCardStrings(FILENAME));
+        gridLayout = configurGridPane(readCardStrings());
         layout = gridLayout;
         configureCards();
 
@@ -303,27 +303,34 @@ public class MemoryApp extends Application {
      * @return Pairs of strings from the file.
      * @throws FileNotFoundException File not found.
      */
-    private ArrayList<String[]> readCardStrings (String filename) throws FileNotFoundException {
+    private ArrayList<String[]> readCardStrings () throws FileNotFoundException {
         ArrayList<String[]> cardPairs = new ArrayList<>();
-        File data = new File(filename);
-        Scanner pairIn = new Scanner(data);
 
-        while (pairIn.hasNext()) {
-            // Get card pair
-            Scanner singleIn = new Scanner(pairIn.nextLine());
-            singleIn.useDelimiter(",");    
+        if (QUICK_TEST) {
+            String[] pairA = {"a", "a"};
+            String[] pairB = {"b", "b"};
+            cardPairs.add(pairA);
+            cardPairs.add(pairB);
+        } else {
+            Scanner pairIn = new Scanner(pickFile());
 
-            // Set the pair
-            String[] pair = new String[2];
-            pair[0] = singleIn.next();
-            if (singleIn.hasNext()) {
-                pair[1] = singleIn.next(); // If card has a pair.
-            } else {
-                pair[1] = pair[0]; // If not, duplicate card.
+            while (pairIn.hasNext()) {
+                // Get card pair
+                Scanner singleIn = new Scanner(pairIn.nextLine());
+                singleIn.useDelimiter(",");    
+
+                // Set the pair
+                String[] pair = new String[2];
+                pair[0] = singleIn.next();
+                if (singleIn.hasNext()) {
+                    pair[1] = singleIn.next(); // If card has a pair.
+                } else {
+                    pair[1] = pair[0]; // If not, duplicate card.
+                }
+                cardPairs.add(pair);
             }
-            cardPairs.add(pair);
+            pairIn.close();
         }
-        pairIn.close();
 
         //for (String[] strings : cardPairs) {
         //    System.out.println(strings[0] + " " + strings[1]);
@@ -331,6 +338,15 @@ public class MemoryApp extends Application {
 
         pairsRemaining = cardPairs.size();
         return cardPairs;
+    }
+
+    /**
+     * Picks a random set in the './sets/' directory
+     * @return Random set to use
+     */
+    private File pickFile() {
+        File[] sets = new File("sets").listFiles();
+        return sets[new Random().nextInt(sets.length)];
     }
 
     /**
