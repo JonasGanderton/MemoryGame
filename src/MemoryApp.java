@@ -181,7 +181,11 @@ public class MemoryApp extends Application {
         // Set row constraints
         for (int i = 0; i < rows; i++) {
             RowConstraints rc = new RowConstraints();
-            rc.setPercentHeight(13);
+            if (rows < 6) {
+                rc.setPercentHeight(15);
+            } else { // Make the cards fit better
+                rc.setPercentHeight(85 / rows);
+            }
             rc.setVgrow(Priority.ALWAYS);
             rc.setFillHeight(true);
             grid.getRowConstraints().add(rc);
