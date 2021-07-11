@@ -12,7 +12,9 @@ public class VisibleCard extends Card {
      */
     public VisibleCard(String text) {
         super(text);
-        setStyle(IDLE_STYLE);
+        getStyleClass().clear();
+        getStyleClass().add("visible-idle");
+        //setStyle(IDLE_STYLE);
         setActions();
     }
 
@@ -22,9 +24,12 @@ public class VisibleCard extends Card {
     private void setActions() {
         setOnMouseEntered(e -> {
             if (!selected) {
-                setStyle(HOVER_STYLE);
+                getStyleClass().clear();
+                getStyleClass().add("visible-hover");
+                //setStyle(HOVER_STYLE);
             }
         });
-        setOnMouseExited(e -> setStyle(IDLE_STYLE));
+        setOnMouseExited(e -> getStyleClass().add("visible-idle"));
+        //setOnMouseExited(e -> setStyle(IDLE_STYLE));
     }
 }

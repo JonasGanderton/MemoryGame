@@ -1,4 +1,11 @@
 import javafx.scene.control.Button;
+/*
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;*/
 
 /**
  * Card.java
@@ -10,17 +17,19 @@ import javafx.scene.control.Button;
  */
 public class Card extends Button {
 
-    protected static final String FONT_STYLE = "-fx-text-fill: #004040;-fx-font-size: 16px;";
+    protected static final String FONT_STYLE = "-fx-text-fill: #004040; -fx-font-size: 16px;";
     protected static final String PLAYER_ONE_STYLE = "-fx-background-color: #A3DCFF;" + FONT_STYLE;
     protected static final String PLAYER_TWO_STYLE = "-fx-background-color: #B4E8B3;" + FONT_STYLE;
     protected static final String IDLE_STYLE = "-fx-background-color: #F8EB77;";
-    protected static final String HOVER_STYLE = "-fx-background-color: #FFFA99;";
+    //protected static final String IDLE_STYLE = "-fx-background-image: url(\"cardBG1.jpg\");";
+    protected static final String HOVER_STYLE = "-fx-background-color: #FFFA99; -fx-border-style: solid; -fx-border-width: 10px; -fx-border-color: black; -fx-border-radius: 20px;";
     protected static final String SELECTED_STYLE = "-fx-background-color: #FFE75C;" + FONT_STYLE;
-    private static final String HIDDEN_FONT_STYLE = "-fx-text-fill: transparent;";
+    private static final String HIDDEN_FONT_STYLE = "-fx-text-fill: red;";
 
     protected boolean selected;
     private Card pair;
     private int playerNum;
+    //private Background bg;
 
     /**
      * Create a card.
@@ -30,9 +39,15 @@ public class Card extends Button {
     public Card(String text) {
         super(text);
         selected = false;
-        setStyle(IDLE_STYLE + HIDDEN_FONT_STYLE);
+        getStyleClass().add("hidden-idle");
+        //setStyle(HIDDEN_FONT_STYLE);
         setActions();
         playerNum = -1;
+        /*bg = new Background(new BackgroundImage(new Image(
+            "file:cardBG4.jpg", 148, 88, true, true),
+            BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
+            BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
+        setBackground(bg);*/
     }
 
     /**
@@ -41,12 +56,36 @@ public class Card extends Button {
     private void setActions() {
         setOnMouseEntered(e -> {
             if (!selected) {
+                getStyleClass().clear();
+                getStyleClass().add("hidden-hover");
+            }
+        });
+
+        setOnMouseExited(e -> {
+            getStyleClass().clear();
+            if (!selected) {
+                getStyleClass().add("hidden-idle");
+            } else {
+                if (playerNum == 0) {
+                    getStyleClass().add("selected-player-one");
+                } else if (playerNum == 1) {
+                    getStyleClass().add("selected-player-two");
+                } else {
+                    getStyleClass().add("selected");
+                }
+            }
+        });
+    }
+    private void setActionsOLD() {
+        setOnMouseEntered(e -> {
+            if (!selected) {
                 setStyle(HOVER_STYLE + HIDDEN_FONT_STYLE);
             }
         });
         setOnMouseExited(e -> {
             if (!selected) {
-                setStyle(IDLE_STYLE + HIDDEN_FONT_STYLE); // Currently scrolling over.
+                setStyle(HIDDEN_FONT_STYLE); // Currently scrolling over.
+                //setBackground(bg);
             } else {
                 // Has been clicked on too.
                 if (playerNum == 0) {
@@ -79,10 +118,20 @@ public class Card extends Button {
      */
     public void setSelected(boolean selected) {
         this.selected = selected;
+        getStyleClass().clear();
+        if (selected) {
+            getStyleClass().add("selected");
+        } else {
+            getStyleClass().add("hidden-idle");
+        }
+    }
+    public void setSelectedOLD(boolean selected) {
+        this.selected = selected;
         if (selected) {
             setStyle(SELECTED_STYLE);
         } else {
-            setStyle(IDLE_STYLE + HIDDEN_FONT_STYLE);
+            setStyle(HIDDEN_FONT_STYLE);
+            //setBackground(bg);
         }
     }
 
@@ -90,7 +139,9 @@ public class Card extends Button {
      * Set the card to hover style.
      */
     public void setStyleHover() {
-        setStyle(HOVER_STYLE + HIDDEN_FONT_STYLE);
+        getStyleClass().clear();
+        getStyleClass().add("hidden-idle");
+        //setStyle(HOVER_STYLE + HIDDEN_FONT_STYLE);
     }
 
     /**
@@ -99,10 +150,13 @@ public class Card extends Button {
      */
     public void selectedByPlayer(int playerNum) {
         this.playerNum = playerNum;
+        getStyleClass().clear();
         if (playerNum == 0) {
-            setStyle(PLAYER_ONE_STYLE);
+            getStyleClass().add("selected-player-one");
+            //setStyle(PLAYER_ONE_STYLE);
         } else if (playerNum == 1) {
-            setStyle(PLAYER_TWO_STYLE);
+            getStyleClass().add("selected-player-two");
+            //setStyle(PLAYER_TWO_STYLE);
         }
     }
 }

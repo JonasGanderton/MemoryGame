@@ -9,8 +9,10 @@ import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -37,11 +39,11 @@ public class MemoryApp extends Application {
     private static final boolean SHOW_GRID_LINES = false;
     private static final boolean SHOW_MINOR_GRID_LINES = false;
     private static final boolean CAN_RESIZE = true;
-    private static final boolean QUICK_TEST = false;
+    private static final boolean QUICK_TEST = true;
     private static final int SCREEN_WIDTH = 680;
-    private static final int SCREEN_HEIGHT = 630;
+    private static final int SCREEN_HEIGHT = 845;
     private static final int SPACING = 10;
-    private static final String BACKGROUND_STYLE = "-fx-background-color: #FFF9AF;";
+    //private static final String BACKGROUND_STYLE = "-fx-background-color: #FFF9AF;";
     private static final String PLAYER_ONE_NAME = "Jonas";
     private static final String PLAYER_TWO_NAME = "Katharina";
 
@@ -68,6 +70,19 @@ public class MemoryApp extends Application {
     @Override
     public void start(Stage window) throws FileNotFoundException {
         // Configure the scene and window
+        /*
+        Scene scene = new Scene(new Group(), 400, 400);
+        scene.getStylesheets().add("style.css");
+        Button rect = new Button();
+        rect.setLayoutX(50);
+        rect.setLayoutY(50);
+        rect.getStyleClass().add("main-background");
+        //rect.setStyle("-fx-background-radius: 50px; " + "-fx-min-width: 300px; " + "-fx-min-height: 300px; "
+        //        + "-fx-max-width: 300px; " + "-fx-max-height: 300px;");
+        ((Group)scene.getRoot()).getChildren().add(rect);
+        window.setScene(scene);
+        window.show();*/
+        
         this.window = window;
         configurePlayers();
         Random r = new Random();
@@ -92,11 +107,12 @@ public class MemoryApp extends Application {
         hideAll.setText("Flip selected cards");
         canSelect = true;
         scene = new Scene(layout, SCREEN_WIDTH, SCREEN_HEIGHT);
-        
+        scene.getStylesheets().add("style.css");
+        /* // Image as background
         layout.setBackground(new Background(new BackgroundImage(new Image(
             "file:background.png", SCREEN_WIDTH, SCREEN_HEIGHT, true, false),
             BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
-            BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+            BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));*/
         window.setResizable(CAN_RESIZE);
         window.setScene(scene);
         window.setTitle("Memory game");
@@ -113,8 +129,9 @@ public class MemoryApp extends Application {
         configureCards();
 
         // Some layout settings
-        layout.setStyle(BACKGROUND_STYLE); // Uncomment if no other background
+        //layout.setStyle(BACKGROUND_STYLE); // Uncomment if no other background
         layout.setPadding(new Insets(SPACING)); // If all different: ^ > v <
+        layout.getStyleClass().add("main-background");
 
         // Add hide all card
         configureHideAllCard();
@@ -181,11 +198,13 @@ public class MemoryApp extends Application {
         // Set row constraints
         for (int i = 0; i < rows; i++) {
             RowConstraints rc = new RowConstraints();
+            /*
             if (rows < 6) {
                 rc.setPercentHeight(15);
             } else { // Make the cards fit better
                 rc.setPercentHeight(85 / rows);
-            }
+            }*/
+            rc.setPercentHeight(11.5);
             rc.setVgrow(Priority.ALWAYS);
             rc.setFillHeight(true);
             grid.getRowConstraints().add(rc);

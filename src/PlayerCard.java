@@ -10,6 +10,7 @@ public class PlayerCard extends VisibleCard {
      */
     public PlayerCard(String text) {
         super(text);
+        getStyleClass().clear();
         setActions();
         name = text;
         score = 0;
@@ -18,10 +19,13 @@ public class PlayerCard extends VisibleCard {
     }
 
     public void setPlayer(int playerNum) {
+        getStyleClass().clear();
         if (playerNum == 1) {
-            setStyle(PLAYER_ONE_STYLE);
+            getStyleClass().add("player-one");
+            //setStyle(PLAYER_ONE_STYLE);
         } else if (playerNum == 2) {
-            setStyle(PLAYER_TWO_STYLE);
+            getStyleClass().add("player-two");
+            //setStyle(PLAYER_TWO_STYLE);
         }
     }
 
