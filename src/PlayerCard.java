@@ -3,6 +3,7 @@ public class PlayerCard extends VisibleCard {
     private int score;
     private int gamesWon;
     private String name;
+    private String playerNumString;
 
     /**
      * Construct a Player card.
@@ -21,11 +22,22 @@ public class PlayerCard extends VisibleCard {
     public void setPlayer(int playerNum) {
         getStyleClass().clear();
         if (playerNum == 1) {
-            getStyleClass().add("player-one");
+            playerNumString = "one";
+            getStyleClass().add("player-one-active");
             //setStyle(PLAYER_ONE_STYLE);
         } else if (playerNum == 2) {
-            getStyleClass().add("player-two");
+            playerNumString = "two";
+            getStyleClass().add("player-two-active");
             //setStyle(PLAYER_TWO_STYLE);
+        }
+    }
+
+    public void setActive(boolean active) {
+        getStyleClass().clear();
+        if (active) {
+            getStyleClass().add("player-" + playerNumString + "-active");
+        } else {
+            getStyleClass().add("player-" + playerNumString + "-inactive");
         }
     }
 

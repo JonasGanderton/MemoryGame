@@ -29,7 +29,10 @@ public class VisibleCard extends Card {
                 //setStyle(HOVER_STYLE);
             }
         });
-        setOnMouseExited(e -> getStyleClass().add("visible-idle"));
+        setOnMouseExited(e -> {
+            getStyleClass().clear();
+            getStyleClass().add("visible-idle");
+        });
         //setOnMouseExited(e -> setStyle(IDLE_STYLE));
     }
 }

@@ -9,16 +9,8 @@ import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -39,7 +31,7 @@ public class MemoryApp extends Application {
     private static final boolean SHOW_GRID_LINES = false;
     private static final boolean SHOW_MINOR_GRID_LINES = false;
     private static final boolean CAN_RESIZE = true;
-    private static final boolean QUICK_TEST = true;
+    private static final boolean QUICK_TEST = false;
     private static final int SCREEN_WIDTH = 680;
     private static final int SCREEN_HEIGHT = 845;
     private static final int SPACING = 10;
@@ -131,7 +123,7 @@ public class MemoryApp extends Application {
         // Some layout settings
         //layout.setStyle(BACKGROUND_STYLE); // Uncomment if no other background
         layout.setPadding(new Insets(SPACING)); // If all different: ^ > v <
-        layout.getStyleClass().add("main-background");
+        layout.getStyleClass().add("main");
 
         // Add hide all card
         configureHideAllCard();
@@ -402,12 +394,14 @@ public class MemoryApp extends Application {
      */
     private void switchPlayer() {
         players[currentPlayer].setDisable(true);
+        players[currentPlayer].setActive(false);
         if (currentPlayer == 0) {
             currentPlayer = 1;
         } else {
             currentPlayer = 0;
         }
         players[currentPlayer].setDisable(false);
+        players[currentPlayer].setActive(true);
     }
 
     /**

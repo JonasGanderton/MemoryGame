@@ -1,3 +1,4 @@
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 /*
 import javafx.scene.image.Image;
@@ -21,7 +22,6 @@ public class Card extends Button {
     protected static final String PLAYER_ONE_STYLE = "-fx-background-color: #A3DCFF;" + FONT_STYLE;
     protected static final String PLAYER_TWO_STYLE = "-fx-background-color: #B4E8B3;" + FONT_STYLE;
     protected static final String IDLE_STYLE = "-fx-background-color: #F8EB77;";
-    //protected static final String IDLE_STYLE = "-fx-background-image: url(\"cardBG1.jpg\");";
     protected static final String HOVER_STYLE = "-fx-background-color: #FFFA99; -fx-border-style: solid; -fx-border-width: 10px; -fx-border-color: black; -fx-border-radius: 20px;";
     protected static final String SELECTED_STYLE = "-fx-background-color: #FFE75C;" + FONT_STYLE;
     private static final String HIDDEN_FONT_STYLE = "-fx-text-fill: red;";
@@ -38,6 +38,7 @@ public class Card extends Button {
      */
     public Card(String text) {
         super(text);
+        setAlignment(Pos.CENTER);
         selected = false;
         getStyleClass().add("hidden-idle");
         //setStyle(HIDDEN_FONT_STYLE);
@@ -58,6 +59,7 @@ public class Card extends Button {
             if (!selected) {
                 getStyleClass().clear();
                 getStyleClass().add("hidden-hover");
+                // setStyle(HOVER_STYLE + HIDDEN_FONT_STYLE);
             }
         });
 
@@ -65,35 +67,19 @@ public class Card extends Button {
             getStyleClass().clear();
             if (!selected) {
                 getStyleClass().add("hidden-idle");
+                // setStyle(HIDDEN_FONT_STYLE);
+                // setBackground(bg);
             } else {
+                // Has been clicked on
                 if (playerNum == 0) {
                     getStyleClass().add("selected-player-one");
+                    // setStyle(PLAYER_ONE_STYLE);
                 } else if (playerNum == 1) {
                     getStyleClass().add("selected-player-two");
+                    // setStyle(PLAYER_TWO_STYLE);
                 } else {
                     getStyleClass().add("selected");
-                }
-            }
-        });
-    }
-    private void setActionsOLD() {
-        setOnMouseEntered(e -> {
-            if (!selected) {
-                setStyle(HOVER_STYLE + HIDDEN_FONT_STYLE);
-            }
-        });
-        setOnMouseExited(e -> {
-            if (!selected) {
-                setStyle(HIDDEN_FONT_STYLE); // Currently scrolling over.
-                //setBackground(bg);
-            } else {
-                // Has been clicked on too.
-                if (playerNum == 0) {
-                    setStyle(PLAYER_ONE_STYLE);
-                } else if (playerNum == 1) {
-                    setStyle(PLAYER_TWO_STYLE);
-                } else {
-                    setStyle(SELECTED_STYLE);
+                    // setStyle(SELECTED_STYLE);
                 }
             }
         });

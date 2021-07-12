@@ -1,77 +1,160 @@
-.main-background {
+@font-face {
+    font-family: "Comfortaa";
+    src: url("src/Comfortaa.ttf");
+}
+
+.main {
     -fx-background-color: #FFF9AF;
+        background-color: #FFF9AF;
+    -fx-font-size: 16px;
+        font-size: 16px;
+    -fx-font-family: "Comfortaa";
+        font-family: "Comfortaa";
+    /*  Text is aligned to centre using
+        Card.setAlignment(Pos.CENTER);*/
 }
 
 .hidden-idle {
     -fx-text-fill: transparent;
     -fx-background-color: #FFF9AF;
+        background-color: #FFF9AF;
     -fx-border-style: solid;
+        border-style: solid;
     -fx-border-width: 7px;
+        border-width: 7px;
     -fx-border-color: rgb(145, 86, 86);
+        border-color: rgb(145, 86, 86);
     -fx-border-radius: 15px;
+        border-radius: 15px;
 }
 
 .hidden-hover {
     -fx-text-fill: transparent;
     -fx-background-color: #FFFA99;
+        background-color: #FFFA99;
     -fx-border-style: solid;
+        border-style: solid;
     -fx-border-width: 9px;
+        border-width: 9px;
     -fx-border-color: rgb(146, 58, 58);
+        border-color: rgb(146, 58, 58);
     -fx-border-radius: 15px;
+        border-radius: 15px;
 }
 
 .selected {
-    -fx-background-color: #FFFA99; /*#FFE75C;*/
+    -fx-background-color: #FFFA99;
+    background-color: #FFFA99;
     -fx-border-style: solid;
+        border-style: solid;
     -fx-border-width: 9px;
+        border-width: 9px;
     -fx-border-color: rgb(146, 58, 58);
+        border-color: rgb(146, 58, 58);
     -fx-border-radius: 15px;
+        border-radius: 15px;
 }
 
 .selected-player-one {
     -fx-background-color: #A3DCFF;
+        background-color: #A3DCFF;
     -fx-border-style: solid;
+        border-style: solid;
     -fx-border-width: 8px;
+        border-width: 8px;
     -fx-border-color: #72b7e2;
+        border-color: #72b7e2;
     -fx-border-radius: 15px;
+        border-radius: 15px;
 }
 
 .selected-player-two {
     -fx-background-color: #B4E8B3;
+        background-color: #B4E8B3;
     -fx-border-style: solid;
+        border-style: solid;
     -fx-border-width: 8px;
+        border-width: 8px;
     -fx-border-color: #74db73;
+        border-color: #74db73;
     -fx-border-radius: 15px;
+        border-radius: 15px;
 }
 
 .visible-idle {
-    -fx-background-color: #F8EB77;
+    -fx-background-color: #FFFA99;
+        background-color: #FFFA99;
     -fx-border-style: solid;
+        border-style: solid;
     -fx-border-width: 5px;
-    -fx-border-color: rgb(230, 215, 81);
+        border-width: 5px;
+    -fx-border-color: #f0e969;
+        border-color: #f0e969;
     -fx-border-radius: 10px;
+        border-radius: 10px;
 }
 
 .visible-hover {
-    -fx-background-color: #FFFA99;
+    -fx-background-color: #F8EB77;
+        background-color: #F8EB77;
     -fx-border-style: solid;
+        border-style: solid;
     -fx-border-width: 5px;
-    -fx-border-color: #f0e969;
+        border-width: 5px;
+    -fx-border-color: #e6d751;
+        border-color: #e6d751;
     -fx-border-radius: 10px;
+        border-radius: 10px;
 }
 
-.player-one {
+.player-one-active {
     -fx-background-color: #A3DCFF;
+        background-color: #A3DCFF;
     -fx-border-style: solid;
+        border-style: solid;
     -fx-border-width: 3px;
+        border-width: 3px;
     -fx-border-color: #72b7e2;
+        border-color: #72b7e2;
     -fx-border-radius: 5px;
+        border-radius: 5px;
 }
 
-.player-two {
-    -fx-background-color: #B4E8B3;
+.player-one-inactive {
+    -fx-background-color: #D6EFFF;
+        background-color: #D6EFFF;
     -fx-border-style: solid;
+        border-style: solid;
     -fx-border-width: 3px;
-    -fx-border-color: #74db73;
+        border-width: 3px;
+    -fx-border-color: #B8D2E3;
+        border-color: #B8D2E3;
     -fx-border-radius: 5px;
+        border-radius: 5px;
+}
+
+.player-two-active {
+    -fx-background-color: #B4E8B3;
+        background-color: #B4E8B3;
+    -fx-border-style: solid;
+        border-style: solid;
+    -fx-border-width: 3px;
+        border-width: 3px;
+    -fx-border-color: #74db73;
+        border-color: #74db73;
+    -fx-border-radius: 5px;
+        border-radius: 5px;
+}
+
+.player-two-inactive {
+    -fx-background-color: #CDE8CC;
+        background-color: #CDE8CC;
+    -fx-border-style: solid;
+        border-style: solid;
+    -fx-border-width: 3px;
+        border-width: 3px;
+    -fx-border-color: #AEDBAD;
+        border-color: #AEDBAD;
+    -fx-border-radius: 5px;
+        border-radius: 5px;
 }
