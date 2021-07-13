@@ -61,20 +61,7 @@ public class MemoryApp extends Application {
      */
     @Override
     public void start(Stage window) throws FileNotFoundException {
-        // Configure the scene and window
-        /*
-        Scene scene = new Scene(new Group(), 400, 400);
-        scene.getStylesheets().add("style.css");
-        Button rect = new Button();
-        rect.setLayoutX(50);
-        rect.setLayoutY(50);
-        rect.getStyleClass().add("main-background");
-        //rect.setStyle("-fx-background-radius: 50px; " + "-fx-min-width: 300px; " + "-fx-min-height: 300px; "
-        //        + "-fx-max-width: 300px; " + "-fx-max-height: 300px;");
-        ((Group)scene.getRoot()).getChildren().add(rect);
-        window.setScene(scene);
-        window.show();*/
-        
+        // Configure the scene and window        
         this.window = window;
         configurePlayers();
         Random r = new Random();
@@ -301,11 +288,28 @@ public class MemoryApp extends Application {
         // Set column sizes
         for (int i = 0; i < 3; i++) {
             ColumnConstraints cc = new ColumnConstraints();
-            cc.setPercentWidth(25);
+            cc.setPercentWidth(30);
+            if (i == 1) { // Set gap between two players
+                cc.setPercentWidth(25);   
+            }
             cc.setHgrow(Priority.ALWAYS);
             cc.setFillWidth(true);
             playersPane.getColumnConstraints().add(cc);
         }
+
+        // Row constraint for player pane inside grid layout
+        RowConstraints layoutRC = new RowConstraints();
+        layoutRC.setPercentHeight(5);
+        layoutRC.setVgrow(Priority.ALWAYS);
+        layoutRC.setFillHeight(true);
+        gridLayout.getRowConstraints().add(layoutRC);
+
+        // Row constraint for players in player pane
+        RowConstraints playersRC = new RowConstraints();
+        playersRC.setPercentHeight(100);
+        playersRC.setVgrow(Priority.ALWAYS);
+        playersRC.setFillHeight(true);
+        playersPane.getRowConstraints().add(playersRC);
     }
 
     /**
