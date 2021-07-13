@@ -16,6 +16,7 @@
 }
 
 .hidden-idle {
+    -fx-background-radius: 22px;
     -fx-text-fill: transparent;
     -fx-background-color: #FFF9AF;
         background-color: #FFF9AF;
@@ -30,6 +31,7 @@
 }
 
 .hidden-hover {
+    -fx-background-radius: 22px;
     -fx-text-fill: transparent;
     -fx-background-color: #FFFA99;
         background-color: #FFFA99;
@@ -44,6 +46,7 @@
 }
 
 .selected {
+    -fx-background-radius: 22px;
     -fx-background-color: #FFFA99;
         background-color: #FFFA99;
     -fx-border-style: solid;
@@ -57,6 +60,7 @@
 }
 
 .selected-player-one {
+    -fx-background-radius: 22px;
     -fx-background-color: #A3DCFF;
         background-color: #A3DCFF;
     -fx-border-style: solid;
@@ -70,6 +74,7 @@
 }
 
 .selected-player-two {
+    -fx-background-radius: 22px;
     -fx-background-color: #B4E8B3;
         background-color: #B4E8B3;
     -fx-border-style: solid;
@@ -83,6 +88,7 @@
 }
 
 .visible-idle {
+    -fx-background-radius: 15px;
     -fx-background-color: #FFFA99;
         background-color: #FFFA99;
     -fx-border-style: solid;
@@ -96,6 +102,7 @@
 }
 
 .visible-hover {
+    -fx-background-radius: 15px;
     -fx-background-color: #F8EB77;
         background-color: #F8EB77;
     -fx-border-style: solid;
@@ -109,6 +116,7 @@
 }
 
 .player-one-active {
+    -fx-background-radius: 7px;
     -fx-background-color: #A3DCFF;
         background-color: #A3DCFF;
     -fx-border-style: solid;
@@ -122,6 +130,7 @@
 }
 
 .player-one-inactive {
+    -fx-background-radius: 7px;
     -fx-background-color: #D6EFFF;
         background-color: #D6EFFF;
     -fx-border-style: solid;
@@ -135,6 +144,7 @@
 }
 
 .player-two-active {
+    -fx-background-radius: 7px;
     -fx-background-color: #B4E8B3;
         background-color: #B4E8B3;
     -fx-border-style: solid;
@@ -148,6 +158,7 @@
 }
 
 .player-two-inactive {
+    -fx-background-radius: 7px;
     -fx-background-color: #CDE8CC;
         background-color: #CDE8CC;
     -fx-border-style: solid;
