@@ -35,8 +35,8 @@ public class MemoryApp extends Application {
     private static final int SCREEN_WIDTH = 680;
     private static final int SCREEN_HEIGHT = 845;
     private static final int SPACING = 10;
-    private static final String PLAYER_ONE_NAME = "Jonas";
-    private static final String PLAYER_TWO_NAME = "Katharina";
+    private static final String PLAYER_ONE_NAME = "Player 1";
+    private static final String PLAYER_TWO_NAME = "Player 2";
 
     private Scene scene;
     private Pane layout;
