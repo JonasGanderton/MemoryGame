@@ -31,11 +31,10 @@ public class MemoryApp extends Application {
     private static final boolean SHOW_GRID_LINES = false;
     private static final boolean SHOW_MINOR_GRID_LINES = false;
     private static final boolean CAN_RESIZE = true;
-    private static final boolean QUICK_TEST = false;
+    private static final boolean QUICK_TEST = true;
     private static final int SCREEN_WIDTH = 680;
     private static final int SCREEN_HEIGHT = 845;
     private static final int SPACING = 10;
-    //private static final String BACKGROUND_STYLE = "-fx-background-color: #FFF9AF;";
     private static final String PLAYER_ONE_NAME = "Jonas";
     private static final String PLAYER_TWO_NAME = "Katharina";
 
@@ -87,11 +86,6 @@ public class MemoryApp extends Application {
         canSelect = true;
         scene = new Scene(layout, SCREEN_WIDTH, SCREEN_HEIGHT);
         scene.getStylesheets().add("style.css");
-        /* // Image as background
-        layout.setBackground(new Background(new BackgroundImage(new Image(
-            "file:background.png", SCREEN_WIDTH, SCREEN_HEIGHT, true, false),
-            BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
-            BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));*/
         window.setResizable(CAN_RESIZE);
         window.setScene(scene);
         window.setTitle("Memory game");
@@ -108,8 +102,7 @@ public class MemoryApp extends Application {
         configureCards();
 
         // Some layout settings
-        //layout.setStyle(BACKGROUND_STYLE); // Uncomment if no other background
-        layout.setPadding(new Insets(SPACING)); // If all different: ^ > v <
+        layout.setPadding(new Insets(SPACING));
         layout.getStyleClass().add("main");
 
         // Add hide all card

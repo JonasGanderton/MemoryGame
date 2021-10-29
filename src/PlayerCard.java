@@ -24,11 +24,9 @@ public class PlayerCard extends VisibleCard {
         if (playerNum == 1) {
             playerNumString = "one";
             getStyleClass().add("player-one-active");
-            //setStyle(PLAYER_ONE_STYLE);
         } else if (playerNum == 2) {
             playerNumString = "two";
             getStyleClass().add("player-two-active");
-            //setStyle(PLAYER_TWO_STYLE);
         }
     }
 

@@ -1,12 +1,5 @@
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-/*
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;*/
 
 /**
  * Card.java
@@ -41,14 +34,8 @@ public class Card extends Button {
         setAlignment(Pos.CENTER);
         selected = false;
         getStyleClass().add("hidden-idle");
-        //setStyle(HIDDEN_FONT_STYLE);
         setActions();
         playerNum = -1;
-        /*bg = new Background(new BackgroundImage(new Image(
-            "file:cardBG4.jpg", 148, 88, true, true),
-            BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
-            BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
-        setBackground(bg);*/
     }
 
     /**
@@ -59,7 +46,6 @@ public class Card extends Button {
             if (!selected) {
                 getStyleClass().clear();
                 getStyleClass().add("hidden-hover");
-                // setStyle(HOVER_STYLE + HIDDEN_FONT_STYLE);
             }
         });
 
@@ -67,19 +53,14 @@ public class Card extends Button {
             getStyleClass().clear();
             if (!selected) {
                 getStyleClass().add("hidden-idle");
-                // setStyle(HIDDEN_FONT_STYLE);
-                // setBackground(bg);
             } else {
                 // Has been clicked on
                 if (playerNum == 0) {
                     getStyleClass().add("selected-player-one");
-                    // setStyle(PLAYER_ONE_STYLE);
                 } else if (playerNum == 1) {
                     getStyleClass().add("selected-player-two");
-                    // setStyle(PLAYER_TWO_STYLE);
                 } else {
                     getStyleClass().add("selected");
-                    // setStyle(SELECTED_STYLE);
                 }
             }
         });
@@ -117,7 +98,6 @@ public class Card extends Button {
             setStyle(SELECTED_STYLE);
         } else {
             setStyle(HIDDEN_FONT_STYLE);
-            //setBackground(bg);
         }
     }
 
@@ -127,7 +107,6 @@ public class Card extends Button {
     public void setStyleHover() {
         getStyleClass().clear();
         getStyleClass().add("hidden-idle");
-        //setStyle(HOVER_STYLE + HIDDEN_FONT_STYLE);
     }
 
     /**
@@ -139,10 +118,8 @@ public class Card extends Button {
         getStyleClass().clear();
         if (playerNum == 0) {
             getStyleClass().add("selected-player-one");
-            //setStyle(PLAYER_ONE_STYLE);
         } else if (playerNum == 1) {
             getStyleClass().add("selected-player-two");
-            //setStyle(PLAYER_TWO_STYLE);
         }
     }
 }

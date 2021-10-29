@@ -14,7 +14,6 @@ public class VisibleCard extends Card {
         super(text);
         getStyleClass().clear();
         getStyleClass().add("visible-idle");
-        //setStyle(IDLE_STYLE);
         setActions();
     }
 
@@ -26,13 +25,11 @@ public class VisibleCard extends Card {
             if (!selected) {
                 getStyleClass().clear();
                 getStyleClass().add("visible-hover");
-                //setStyle(HOVER_STYLE);
             }
         });
         setOnMouseExited(e -> {
             getStyleClass().clear();
             getStyleClass().add("visible-idle");
         });
-        //setOnMouseExited(e -> setStyle(IDLE_STYLE));
     }
 }
