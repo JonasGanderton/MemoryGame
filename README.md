@@ -10,9 +10,11 @@ A memory game using JavaFX, by Jonas Ganderton.
 <p align = "center">
 Example of game in progress
 </p>
+
 ![Game in progress](https://github.com/JonasGanderton/MemoryGame/blob/master/images/GameInProgress.png?raw=true)
 
 <p align = "center">
 End screen
 </p>
+
 ![End screen](https://github.com/JonasGanderton/MemoryGame/blob/master/images/GameComplete.png?raw=true)
