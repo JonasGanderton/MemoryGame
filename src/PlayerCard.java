@@ -83,6 +83,6 @@ public class PlayerCard extends VisibleCard {
      * Update the player text.
      */
     public void refreshText() {
-        setText(name + "(" + gamesWon + "): " + score);
+        setText(name + " (" + gamesWon + "): " + score);
     }
 }
