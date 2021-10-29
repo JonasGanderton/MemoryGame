@@ -28,13 +28,13 @@ import javafx.stage.Stage;
  */
 public class MemoryApp extends Application {
 
-    private static final boolean SHOW_GRID_LINES = false;
-    private static final boolean SHOW_MINOR_GRID_LINES = false;
-    private static final boolean CAN_RESIZE = true;
-    private static final boolean QUICK_TEST = true;
+    private static final boolean SHOW_GRID_LINES = false;  // Shows grid lines that cards are alligned to
+    private static final boolean SHOW_MINOR_GRID_LINES = false; // Shows grid lines that player scores are alligned to
+    private static final boolean IS_RESIZABLE = false; // If the window can be resized
+    private static final boolean IS_QUICK_TEST = false; // Uses four cards (two pairs) to test changes
     private static final int SCREEN_WIDTH = 680;
     private static final int SCREEN_HEIGHT = 845;
-    private static final int SPACING = 10;
+    private static final int SPACING = 10; // Spacing between JavaFX components
     private static final String PLAYER_ONE_NAME = "Player 1";
     private static final String PLAYER_TWO_NAME = "Player 2";
 
@@ -86,7 +86,7 @@ public class MemoryApp extends Application {
         canSelect = true;
         scene = new Scene(layout, SCREEN_WIDTH, SCREEN_HEIGHT);
         scene.getStylesheets().add("style.css");
-        window.setResizable(CAN_RESIZE);
+        window.setResizable(IS_RESIZABLE);
         window.setScene(scene);
         window.setTitle("Memory game");
         window.show();
@@ -318,7 +318,7 @@ public class MemoryApp extends Application {
     private ArrayList<String[]> readCardStrings () throws FileNotFoundException {
         ArrayList<String[]> cardPairs = new ArrayList<>();
 
-        if (QUICK_TEST) {
+        if (IS_QUICK_TEST) {
             String[] pairA = {"a", "a"};
             String[] pairB = {"b", "b"};
             cardPairs.add(pairA);
