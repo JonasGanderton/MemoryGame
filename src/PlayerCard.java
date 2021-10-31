@@ -7,6 +7,7 @@ public class PlayerCard extends VisibleCard {
 
     /**
      * Construct a Player card.
+     * 
      * @param text Player name.
      */
     public PlayerCard(String text) {
@@ -19,6 +20,11 @@ public class PlayerCard extends VisibleCard {
         refreshText();
     }
 
+    /**
+     * Set player as one or two.
+     * 
+     * @param playerNum Player number.
+     */
     public void setPlayer(int playerNum) {
         getStyleClass().clear();
         if (playerNum == 1) {
@@ -30,6 +36,11 @@ public class PlayerCard extends VisibleCard {
         }
     }
 
+    /**
+     * Set the card as active or inactive style.
+     * 
+     * @param active Whether this card is active.
+     */
     public void setActive(boolean active) {
         getStyleClass().clear();
         if (active) {
@@ -57,6 +68,7 @@ public class PlayerCard extends VisibleCard {
 
     /**
      * Get score.
+     * 
      * @return Score.
      */
     public int getScore() {
