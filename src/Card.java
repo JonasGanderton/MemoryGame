@@ -92,14 +92,6 @@ public class Card extends Button {
             getStyleClass().add("hidden-idle");
         }
     }
-    public void setSelectedOLD(boolean selected) {
-        this.selected = selected;
-        if (selected) {
-            setStyle(SELECTED_STYLE);
-        } else {
-            setStyle(HIDDEN_FONT_STYLE);
-        }
-    }
 
     /**
      * Set the card to hover style.
@@ -111,6 +103,7 @@ public class Card extends Button {
 
     /**
      * Set a card as selected by a player.
+     * 
      * @param playerNum Player that selected card.
      */
     public void selectedByPlayer(int playerNum) {
