@@ -94,6 +94,8 @@ public class MemoryApp extends Application {
 
     /**
      * Configures the layout for the cards.
+     * 
+     * @throws FileNotFoundException Card file not found.
      */
     private void configureLayout() throws FileNotFoundException {
         // Add cards
@@ -112,8 +114,7 @@ public class MemoryApp extends Application {
     }
 
     /**
-     * Test using grid pane for cards.
-     * Each card must be assigned a row and column.
+     * Configure the grid pane with cards to be displayed.
      * 
      * @return GridPane.
      */
@@ -170,12 +171,6 @@ public class MemoryApp extends Application {
         // Set row constraints
         for (int i = 0; i < rows; i++) {
             RowConstraints rc = new RowConstraints();
-            /*
-            if (rows < 6) {
-                rc.setPercentHeight(15);
-            } else { // Make the cards fit better
-                rc.setPercentHeight(85 / rows);
-            }*/
             rc.setPercentHeight(11.5);
             rc.setVgrow(Priority.ALWAYS);
             rc.setFillHeight(true);
@@ -186,10 +181,7 @@ public class MemoryApp extends Application {
     }
 
     /**
-     * When clicked, a card will try to:
-     * - Print its name
-     * - Get added to clicked list
-     * - Go into selected mode
+     * Configure cards to act and appear as expected.
      */
     private void configureCards() {
         ObservableList<Node> nodes = layout.getChildren();
@@ -353,8 +345,9 @@ public class MemoryApp extends Application {
     }
 
     /**
-     * Picks a random set in the './sets/' directory
-     * @return Random set to use
+     * Picks a random set in the './sets/' directory.
+     * 
+     * @return Random set to use.
      */
     private File pickFile() {
         File[] sets = new File("sets").listFiles();
