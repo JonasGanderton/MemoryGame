@@ -11,18 +11,9 @@ import javafx.scene.control.Button;
  */
 public class Card extends Button {
 
-    protected static final String FONT_STYLE = "-fx-text-fill: #004040; -fx-font-size: 16px;";
-    protected static final String PLAYER_ONE_STYLE = "-fx-background-color: #A3DCFF;" + FONT_STYLE;
-    protected static final String PLAYER_TWO_STYLE = "-fx-background-color: #B4E8B3;" + FONT_STYLE;
-    protected static final String IDLE_STYLE = "-fx-background-color: #F8EB77;";
-    protected static final String HOVER_STYLE = "-fx-background-color: #FFFA99; -fx-border-style: solid; -fx-border-width: 10px; -fx-border-color: black; -fx-border-radius: 20px;";
-    protected static final String SELECTED_STYLE = "-fx-background-color: #FFE75C;" + FONT_STYLE;
-    private static final String HIDDEN_FONT_STYLE = "-fx-text-fill: red;";
-
     protected boolean selected;
     private Card pair;
     private int playerNum;
-    //private Background bg;
 
     /**
      * Create a card.
