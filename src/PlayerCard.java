@@ -1,3 +1,12 @@
+/**
+ * PlayerCard.java
+ * 
+ * A card that displays the player's score and whether it's their turn.
+ * 
+ * @author Jonas Ganderton
+ * @since 24/05/2021
+ */
+
 public class PlayerCard extends VisibleCard {
     
     private int score;
