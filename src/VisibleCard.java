@@ -1,7 +1,10 @@
 /**
  * VisibleCard.java
  * 
- * A card that's always visible
+ * A card that's always visible *
+ * 
+ * @author Jonas Ganderton
+ * @since 23/05/2021
  */
 public class VisibleCard extends Card {
 
