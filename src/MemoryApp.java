@@ -300,8 +300,8 @@ public class MemoryApp extends Application {
     /**
      * Reads text from a file.
      * 
-     * Expected format : <card1a>,<card1b><\n><card2a>,<card2b><\n><...>
-     * Other format (card pairs with self) : <card1><\n><card2><\n><card3><\n><...>
+     * Expected format : <card1a>,<card1b><\n><card2a>,<card2b><\n><...>.
+     * Other format (card pairs with self) : <card1><\n><card2><\n><card3><\n><...>.
      * 
      * @param filename File containing cards.
      * @return Pairs of strings from the file.
