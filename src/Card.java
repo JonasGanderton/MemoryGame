@@ -73,6 +73,8 @@ public class Card extends Button {
 
     /**
      * Change style when selected
+     * 
+     * @param selected. Whether this card is selected or not.
      */
     public void setSelected(boolean selected) {
         this.selected = selected;
