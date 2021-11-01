@@ -56,7 +56,7 @@ public class MemoryApp extends Application {
     /**
      * Start the app.
      * 
-     * @param window
+     * @param window JavaFX stage to use.
      */
     @Override
     public void start(Stage window) throws FileNotFoundException {
@@ -116,7 +116,7 @@ public class MemoryApp extends Application {
     /**
      * Configure the grid pane with cards to be displayed.
      * 
-     * @return GridPane.
+     * @return A grid pane populated with cards.
      */
     private GridPane configurGridPane(ArrayList<String[]> cardStrings) {
         GridPane grid = new GridPane();
