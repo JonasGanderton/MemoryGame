@@ -38,14 +38,14 @@ public class MemoryApp extends Application {
     private static final String PLAYER_ONE_NAME = "Player 1";
     private static final String PLAYER_TWO_NAME = "Player 2";
 
+    private final PlayerCard[] players = new PlayerCard[2];
+    private final ArrayList<Card> clicked = new ArrayList<>();
     private Pane layout;
     private GridPane gridLayout;
     private VisibleCard hideAll;
     private int currentPlayer;
     private int pairsRemaining;
-    private PlayerCard[] players = new PlayerCard[2];
     private Boolean canSelect;
-    private ArrayList<Card> clicked = new ArrayList<>();
     private Stage window;
     
     public static void main(String[] args) {
