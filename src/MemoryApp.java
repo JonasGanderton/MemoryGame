@@ -58,7 +58,7 @@ public class MemoryApp extends Application {
      * @param window JavaFX stage to use.
      */
     @Override
-    public void start(Stage window) throws FileNotFoundException {
+    public void start(Stage window) {
         // Configure the scene and window        
         this.window = window;
         configurePlayers();
