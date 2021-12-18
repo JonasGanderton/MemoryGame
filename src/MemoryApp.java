@@ -78,7 +78,7 @@ public class MemoryApp extends Application {
         try {
             configureLayout();
         } catch (FileNotFoundException e) {
-            System.out.println(e);
+            e.printStackTrace();
             System.exit(0);
         }
         hideAll.setText("Flip selected cards");
