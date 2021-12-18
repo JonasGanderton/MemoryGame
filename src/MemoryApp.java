@@ -131,9 +131,9 @@ public class MemoryApp extends Application {
 
         // Add cards to ArrayList to shuffle
         ArrayList<Card> allCards = new ArrayList<>();
-        for (int i = 0; i < cardStrings.size(); i++) {
-            Card c1 = new Card(cardStrings.get(i)[0]);
-            Card c2 = new Card(cardStrings.get(i)[1]);
+        for (String[] cardString : cardStrings) {
+            Card c1 = new Card(cardString[0]);
+            Card c2 = new Card(cardString[1]);
             c1.setPair(c2);
             c2.setPair(c1);
             allCards.add(c1);
