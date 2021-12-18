@@ -1,3 +1,6 @@
 .vscode
+.idea
+MemoryGame.iml
+out/
 sets/*
 !sets/demo.txt
