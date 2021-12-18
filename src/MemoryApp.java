@@ -28,8 +28,8 @@ import javafx.stage.Stage;
  */
 public class MemoryApp extends Application {
 
-    private static final boolean SHOW_GRID_LINES = false;  // Shows grid lines that cards are alligned to
-    private static final boolean SHOW_MINOR_GRID_LINES = false; // Shows grid lines that player scores are alligned to
+    private static final boolean SHOW_GRID_LINES = false;  // Shows grid lines that cards are aligned to
+    private static final boolean SHOW_MINOR_GRID_LINES = false; // Shows grid lines that player scores are aligned to
     private static final boolean IS_RESIZABLE = false; // If the window can be resized
     private static final boolean IS_QUICK_TEST = false; // Uses four cards (two pairs) to test changes
     private static final int SCREEN_WIDTH = 680;
@@ -99,7 +99,7 @@ public class MemoryApp extends Application {
      */
     private void configureLayout() throws FileNotFoundException {
         // Add cards
-        gridLayout = configurGridPane(readCardStrings());
+        gridLayout = configureGridPane(readCardStrings());
         layout = gridLayout;
         configureCards();
 
@@ -118,7 +118,7 @@ public class MemoryApp extends Application {
      * 
      * @return A grid pane populated with cards.
      */
-    private GridPane configurGridPane(ArrayList<String[]> cardStrings) {
+    private GridPane configureGridPane(ArrayList<String[]> cardStrings) {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setVgap(SPACING);
@@ -130,7 +130,7 @@ public class MemoryApp extends Application {
         int cardNum = cardStrings.size() * 2;
         int rows = cardNum / cols + ((cardNum % cols != 0) ? 1 : 0);
 
-        // Add cards to ArrayList to shuffen
+        // Add cards to ArrayList to shuffle
         ArrayList<Card> allCards = new ArrayList<>();
         for (int i = 0; i < cardStrings.size(); i++) {
             Card c1 = new Card(cardStrings.get(i)[0]);
@@ -216,7 +216,7 @@ public class MemoryApp extends Application {
      */
     private void configureHideAllCard() {
         hideAll = new VisibleCard("Flip selected cards");
-        hideAll.setDisable(true); // Can't press until two cards to unflip.
+        hideAll.setDisable(true); // Can't press until two cards to un-flip.
         hideAll.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Fill row and column
         hideAll.setOnAction(e -> {
             if (pairsRemaining > 0) {
@@ -302,8 +302,7 @@ public class MemoryApp extends Application {
      * 
      * Expected format : <card1a>,<card1b><\n><card2a>,<card2b><\n><...>.
      * Other format (card pairs with self) : <card1><\n><card2><\n><card3><\n><...>.
-     * 
-     * @param filename File containing cards.
+     *
      * @return Pairs of strings from the file.
      * @throws FileNotFoundException File not found.
      */
